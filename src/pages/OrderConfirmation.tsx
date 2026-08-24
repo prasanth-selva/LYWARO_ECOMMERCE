@@ -7,8 +7,8 @@ export default function OrderConfirmation() {
   const orderNumber = `LYW-${Date.now().toString().slice(-6)}`;
 
   return (
-    <div className="min-h-screen pt-20 lg:pt-24 pb-20 flex items-center justify-center">
-      <div className="max-w-lg mx-auto px-4 text-center">
+    <div className="min-h-screen pt-16 lg:pt-24 pb-20 flex items-center justify-center px-4">
+      <div className="max-w-lg mx-auto text-center">
         <motion.div
           initial={{ scale: 0 }}
           animate={{ scale: 1 }}

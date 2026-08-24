@@ -17,13 +17,13 @@ export default function FAQ() {
   const [openIndex, setOpenIndex] = useState<number | null>(null);
 
   return (
-    <div className="min-h-screen pt-20 lg:pt-24 pb-20">
+    <div className="min-h-screen pt-16 lg:pt-24 pb-20">
       <div className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex items-center gap-3 mb-2">
           <div className="w-8 h-px bg-lywaro-crimson" />
           <span className="text-[10px] font-bold tracking-[0.3em] text-lywaro-crimson">SUPPORT</span>
         </div>
-        <h1 className="text-3xl lg:text-5xl font-black tracking-tight text-white mb-4">FREQUENTLY ASKED</h1>
+        <h1 className="text-2xl md:text-3xl lg:text-5xl font-black tracking-tight text-white mb-4">FREQUENTLY ASKED</h1>
         <p className="text-sm text-lywaro-gray mb-12">Everything you need to know about LYWARO.</p>
 
         <div className="space-y-0">
@@ -60,7 +60,7 @@ export default function FAQ() {
           ))}
         </div>
 
-        <div className="mt-12 p-6 bg-lywaro-charcoal border border-white/5 text-center">
+        <div className="mt-8 md:mt-12 p-5 md:p-6 bg-lywaro-charcoal border border-white/5 text-center">
           <p className="text-sm text-lywaro-gray mb-2">Still have questions?</p>
           <a href="/contact" className="text-sm font-bold tracking-wider text-lywaro-crimson hover:text-white transition-colors">
             CONTACT US →
