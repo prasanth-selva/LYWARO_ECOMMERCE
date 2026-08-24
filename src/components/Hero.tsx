@@ -23,6 +23,7 @@ export default function Hero() {
   const sneakerScale = useTransform(scrollYProgress, [0, 0.5], [1, 0.85]);
   const contentY = useTransform(scrollYProgress, [0, 1], ['0%', '-20%']);
   const opacity = useTransform(scrollYProgress, [0, 0.7], [1, 0]);
+  const scrollIndicatorOpacity = useTransform(scrollYProgress, [0, 0.15], [1, 0]);
 
   useEffect(() => {
     if (reducedMotion) return;
@@ -214,7 +215,7 @@ export default function Hero() {
 
         {/* Scroll indicator */}
         <motion.div
-          style={{ opacity: useTransform(scrollYProgress, [0, 0.15], [1, 0]) }}
+          style={{ opacity: reducedMotion ? 1 : scrollIndicatorOpacity }}
           className="absolute bottom-8 left-1/2 -translate-x-1/2 z-10"
         >
           <div className="flex flex-col items-center gap-2">
