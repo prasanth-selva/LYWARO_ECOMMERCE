@@ -13,7 +13,7 @@ export default function ToastContainer() {
   };
 
   return (
-    <div className="fixed bottom-6 right-6 z-[100] flex flex-col gap-2 pointer-events-none">
+    <div className="fixed bottom-4 left-4 right-4 md:bottom-6 md:right-6 md:left-auto z-[100] flex flex-col gap-2 pointer-events-none items-stretch md:items-end">
       <AnimatePresence>
         {toasts.map((toast) => (
           <motion.div
@@ -22,7 +22,7 @@ export default function ToastContainer() {
             animate={{ opacity: 1, x: 0, scale: 1 }}
             exit={{ opacity: 0, x: 50, scale: 0.95 }}
             transition={{ type: 'spring', damping: 25, stiffness: 300 }}
-            className="flex items-center gap-3 bg-lywaro-charcoal border border-white/10 px-4 py-3 shadow-2xl pointer-events-auto min-w-[280px]"
+            className="flex items-center gap-3 bg-lywaro-charcoal border border-white/10 px-4 py-3 shadow-2xl pointer-events-auto min-w-0 md:min-w-[280px]"
           >
             {icons[toast.type]}
             <span className="text-sm text-white font-medium flex-1">{toast.message}</span>

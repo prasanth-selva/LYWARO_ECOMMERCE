@@ -42,7 +42,7 @@ export default function QuickView({ product, onClose }: QuickViewProps) {
           animate={{ opacity: 1, scale: 1, y: 0 }}
           exit={{ opacity: 0, scale: 0.95, y: 20 }}
           transition={{ type: 'spring', damping: 25 }}
-          className="bg-lywaro-charcoal border border-white/10 max-w-2xl w-full max-h-[90vh] overflow-y-auto"
+          className="bg-lywaro-charcoal border border-white/10 max-w-2xl w-full max-h-[90vh] overflow-y-auto relative"
           onClick={(e) => e.stopPropagation()}
         >
           {/* Close */}
@@ -54,7 +54,7 @@ export default function QuickView({ product, onClose }: QuickViewProps) {
             <X size={20} />
           </button>
 
-          <div className="grid md:grid-cols-2 gap-0">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-0">
             {/* Image */}
             <div className="aspect-square bg-lywaro-dark flex items-center justify-center">
               <div className="text-5xl font-black text-white/10 tracking-wider">{product.name}</div>

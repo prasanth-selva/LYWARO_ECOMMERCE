@@ -19,16 +19,16 @@ export default function Wishlist() {
     .filter(Boolean) as Product[];
 
   return (
-    <div className="min-h-screen pt-20 lg:pt-24 pb-20">
+    <div className="min-h-screen pt-16 lg:pt-24 pb-20">
       <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex items-center gap-3 mb-2">
           <div className="w-8 h-px bg-lywaro-crimson" />
           <span className="text-[10px] font-bold tracking-[0.3em] text-lywaro-crimson">SAVED</span>
         </div>
-        <h1 className="text-3xl lg:text-5xl font-black tracking-tight text-white mb-10">WISHLIST</h1>
+        <h1 className="text-2xl md:text-3xl lg:text-5xl font-black tracking-tight text-white mb-8 md:mb-10">WISHLIST</h1>
 
         {wishlistProducts.length === 0 ? (
-          <div className="text-center py-20">
+          <div className="text-center py-12 md:py-20">
             <Heart size={48} className="text-lywaro-gray/30 mx-auto mb-4" />
             <p className="text-lg font-bold tracking-wider text-white/30 mb-2">YOUR WISHLIST IS EMPTY</p>
             <p className="text-sm text-lywaro-gray/50 mb-8">Save your favourite items for later.</p>

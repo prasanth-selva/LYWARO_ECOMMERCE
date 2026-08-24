@@ -94,11 +94,11 @@ export default function Footer() {
         </div>
 
         {/* Bottom */}
-        <div className="mt-16 pt-8 border-t border-white/5 flex flex-col md:flex-row items-center justify-between gap-4">
+        <div className="mt-10 md:mt-16 pt-6 md:pt-8 border-t border-white/5 flex flex-col md:flex-row items-center justify-between gap-4">
           <p className="text-xs text-lywaro-gray/50">
             © 2026 LYWARO. All rights reserved.
           </p>
-          <div className="flex items-center gap-6">
+          <div className="flex items-center gap-4 md:gap-6 flex-wrap justify-center">
             <span className="text-xs text-lywaro-gray/50">Privacy Policy</span>
             <span className="text-xs text-lywaro-gray/50">Terms of Service</span>
             <span className="text-xs text-lywaro-gray/50">Cookie Policy</span>

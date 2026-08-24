@@ -17,8 +17,8 @@ export default function Login() {
   };
 
   return (
-    <div className="min-h-screen pt-20 lg:pt-24 pb-20 flex items-center justify-center">
-      <div className="w-full max-w-md mx-auto px-4">
+    <div className="min-h-screen pt-16 lg:pt-24 pb-20 flex items-center justify-center px-4">
+      <div className="w-full max-w-md mx-auto">
         <div className="text-center mb-10">
           <Link to="/" className="text-2xl font-black tracking-[0.3em] text-white">LYWARO</Link>
           <h1 className="text-xl font-bold tracking-wider text-white mt-8 mb-2">WELCOME BACK</h1>

@@ -44,15 +44,15 @@ const sections = [
 
 export default function About() {
   return (
-    <div className="min-h-screen pt-20 lg:pt-24">
+    <div className="min-h-screen pt-16 lg:pt-24">
       {/* Hero */}
-      <section className="px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto py-20 lg:py-32">
+      <section className="px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto py-12 md:py-20 lg:py-32">
         <FadeIn>
           <div className="flex items-center gap-3 mb-6">
             <div className="w-8 h-px bg-lywaro-crimson" />
             <span className="text-[10px] font-bold tracking-[0.3em] text-lywaro-crimson">ABOUT LYWARO</span>
           </div>
-          <h1 className="text-5xl lg:text-7xl xl:text-8xl font-black tracking-tight text-white leading-[0.9]">
+          <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-7xl xl:text-8xl font-black tracking-tight text-white leading-[0.9]">
             WE DON'T FOLLOW<br />
             MOTION.<br />
             <span className="text-lywaro-crimson">WE CREATE IT.</span>
@@ -62,13 +62,13 @@ export default function About() {
 
       {/* Sections */}
       {sections.map((section, i) => (
-        <section key={section.tag} className={`px-4 sm:px-6 lg:px-8 py-20 lg:py-32 ${i % 2 === 1 ? 'bg-lywaro-dark' : ''}`}>
+        <section key={section.tag} className={`px-4 sm:px-6 lg:px-8 py-12 md:py-20 lg:py-32 ${i % 2 === 1 ? 'bg-lywaro-dark' : ''}`}>
           <div className="max-w-7xl mx-auto">
             <FadeIn>
               <div className="grid lg:grid-cols-2 gap-12 lg:gap-20 items-start">
                 <div>
                   <span className="text-[10px] font-bold tracking-[0.3em] text-lywaro-crimson mb-4 block">{section.tag}</span>
-                  <h2 className="text-3xl lg:text-5xl font-black tracking-tight text-white leading-tight whitespace-pre-line">
+                  <h2 className="text-2xl sm:text-3xl lg:text-5xl font-black tracking-tight text-white leading-tight whitespace-pre-line">
                     {section.title}
                   </h2>
                 </div>
@@ -82,9 +82,9 @@ export default function About() {
       ))}
 
       {/* CTA */}
-      <section className="px-4 sm:px-6 lg:px-8 py-20 lg:py-32 bg-lywaro-dark">
+      <section className="px-4 sm:px-6 lg:px-8 py-12 md:py-20 lg:py-32 bg-lywaro-dark">
         <FadeIn className="max-w-xl mx-auto text-center">
-          <h2 className="text-3xl lg:text-4xl font-black tracking-tight text-white mb-4">READY TO MOVE DIFFERENT?</h2>
+          <h2 className="text-2xl sm:text-3xl lg:text-4xl font-black tracking-tight text-white mb-4">READY TO MOVE DIFFERENT?</h2>
           <p className="text-sm text-lywaro-gray mb-8">Explore the full collection and find your perfect pair.</p>
           <Link
             to="/shop"

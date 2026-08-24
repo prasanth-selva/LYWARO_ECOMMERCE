@@ -17,7 +17,7 @@ export default function OrderTracking() {
   const currentStep = 3;
 
   return (
-    <div className="min-h-screen pt-20 lg:pt-24 pb-20">
+    <div className="min-h-screen pt-16 lg:pt-24 pb-20">
       <div className="max-w-2xl mx-auto px-4 sm:px-6">
         <Link to="/account" className="inline-flex items-center gap-2 text-xs text-lywaro-gray hover:text-white transition-colors mb-6">
           <ArrowLeft size={12} /> BACK TO ACCOUNT
@@ -27,7 +27,7 @@ export default function OrderTracking() {
           <div className="w-8 h-px bg-lywaro-crimson" />
           <span className="text-[10px] font-bold tracking-[0.3em] text-lywaro-crimson">TRACKING</span>
         </div>
-        <h1 className="text-3xl lg:text-4xl font-black tracking-tight text-white mb-2">
+        <h1 className="text-2xl md:text-3xl lg:text-4xl font-black tracking-tight text-white mb-2">
           ORDER #{id || 'LYW-260815'}
         </h1>
         <p className="text-sm text-lywaro-gray mb-10">Estimated delivery: Aug 20, 2026</p>

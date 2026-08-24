@@ -89,7 +89,7 @@ export default function Home() {
       <section className="py-20 lg:py-32 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto">
         <AnimatedSection>
           <div className="text-center mb-12">
-            <h2 className="text-3xl lg:text-5xl font-black tracking-tight text-white">SHOP BY CATEGORY</h2>
+            <h2 className="text-2xl sm:text-3xl lg:text-5xl font-black tracking-tight text-white">SHOP BY CATEGORY</h2>
           </div>
         </AnimatedSection>
         <AnimatedSection>
@@ -119,7 +119,7 @@ export default function Home() {
       </section>
 
       {/* Brand Story */}
-      <section className="py-20 lg:py-32 px-4 sm:px-6 lg:px-8 bg-lywaro-charcoal">
+      <section className="py-12 md:py-20 lg:py-32 px-4 sm:px-6 lg:px-8 bg-lywaro-charcoal">
         <div className="max-w-7xl mx-auto">
           <AnimatedSection>
             <div className="grid lg:grid-cols-2 gap-12 lg:gap-20 items-center">
@@ -128,7 +128,7 @@ export default function Home() {
                   <div className="w-8 h-px bg-lywaro-crimson" />
                   <span className="text-[10px] font-bold tracking-[0.3em] text-lywaro-crimson">OUR STORY</span>
                 </div>
-                <h2 className="text-3xl lg:text-5xl font-black tracking-tight text-white leading-tight mb-6">
+                <h2 className="text-2xl sm:text-3xl lg:text-5xl font-black tracking-tight text-white leading-tight mb-6">
                   WE DON'T FOLLOW MOTION.<br />
                   <span className="text-lywaro-crimson">WE CREATE IT.</span>
                 </h2>
@@ -156,10 +156,10 @@ export default function Home() {
       {/* Promo Banner */}
       <section className="py-20 lg:py-32 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto">
         <AnimatedSection>
-          <div className="relative bg-gradient-to-r from-lywaro-charcoal to-lywaro-dark border border-white/5 p-8 lg:p-16 text-center">
+          <div className="relative bg-gradient-to-r from-lywaro-charcoal to-lywaro-dark border border-white/5 p-6 md:p-8 lg:p-16 text-center">
             <div className="absolute top-0 left-1/2 -translate-x-1/2 w-32 h-px bg-gradient-to-r from-transparent via-lywaro-crimson to-transparent" />
             <p className="text-[10px] font-bold tracking-[0.3em] text-lywaro-crimson mb-4">FREE SHIPPING</p>
-            <h3 className="text-2xl lg:text-4xl font-black tracking-tight text-white mb-4">
+            <h3 className="text-xl sm:text-2xl lg:text-4xl font-black tracking-tight text-white mb-4">
               ON ALL ORDERS ABOVE ₹5,000
             </h3>
             <p className="text-sm text-lywaro-gray mb-8">No minimum. Free express delivery across India.</p>
@@ -179,7 +179,7 @@ export default function Home() {
         <div className="max-w-xl mx-auto text-center">
           <AnimatedSection>
             <p className="text-[10px] font-bold tracking-[0.3em] text-lywaro-crimson mb-4">STAY CONNECTED</p>
-            <h2 className="text-3xl lg:text-4xl font-black tracking-tight text-white mb-4">JOIN THE MOVEMENT</h2>
+            <h2 className="text-2xl sm:text-3xl lg:text-4xl font-black tracking-tight text-white mb-4">JOIN THE MOVEMENT</h2>
             <p className="text-sm text-lywaro-gray mb-8">
               Be the first to know about new drops, exclusive offers, and LYWARO stories.
             </p>
@@ -188,7 +188,7 @@ export default function Home() {
                 e.preventDefault();
                 alert('Subscribed! (mock)');
               }}
-              className="flex gap-2"
+              className="flex flex-col sm:flex-row gap-2"
             >
               <input
                 type="email"
@@ -199,7 +199,7 @@ export default function Home() {
               />
               <button
                 type="submit"
-                className="bg-white text-black px-6 py-3 text-xs font-bold tracking-[0.15em] hover:bg-lywaro-crimson hover:text-white transition-all duration-300 flex-shrink-0"
+                className="bg-white text-black px-6 py-3 text-xs font-bold tracking-[0.15em] hover:bg-lywaro-crimson hover:text-white transition-all duration-300 flex-shrink-0 w-full sm:w-auto"
               >
                 SUBSCRIBE
               </button>
