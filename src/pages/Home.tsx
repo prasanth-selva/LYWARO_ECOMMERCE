@@ -1,8 +1,7 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useRef } from 'react';
 import { Link } from 'react-router-dom';
 import { motion, useInView } from 'framer-motion';
-import { useRef } from 'react';
-import { ArrowRight, ArrowUpRight, Activity, ShieldCheck, Truck, Headphones } from 'lucide-react';
+import { ArrowRight, ArrowUpRight, Rocket, ShieldCheck, Truck, Headphones } from 'lucide-react';
 import Hero from '../components/Hero';
 import ProductGrid from '../components/ProductGrid';
 import { products, categories } from '../data/products';
@@ -27,136 +26,67 @@ function AnimatedSection({ children, className = '' }: { children: React.ReactNo
 export default function Home() {
   return (
     <>
-      {/* Hero */}
+      {/* Hero Section */}
       <Hero />
 
-      {/* Collection Section */}
-      <section className="py-20 lg:py-32 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto">
+      {/* Collection Section matching Image 1 */}
+      <section className="py-16 lg:py-24 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto">
         <AnimatedSection>
-          <div className="flex items-end justify-between mb-12">
+          <div className="flex items-end justify-between mb-8">
             <div>
-              <div className="flex items-center gap-3 mb-4">
-                <div className="w-8 h-px bg-lywaro-crimson" />
-                <span className="text-[10px] font-bold tracking-[0.3em] text-lywaro-crimson">LATEST</span>
-              </div>
-              <h2 className="text-3xl lg:text-5xl font-black tracking-tight text-white">THE COLLECTION</h2>
-              <p className="mt-3 text-sm text-lywaro-gray">Explore the full LYWARO range.</p>
+              <h2 className="text-2xl lg:text-4xl font-black tracking-tight text-white uppercase">THE COLLECTION</h2>
+              <p className="mt-1 text-xs text-white/50">Explore the full LYWARO range.</p>
             </div>
             <Link
               to="/shop"
-              className="hidden sm:flex items-center gap-2 text-xs font-bold tracking-[0.15em] text-lywaro-gray hover:text-white transition-colors"
+              className="flex items-center gap-2 text-xs font-bold tracking-[0.15em] text-white/70 hover:text-white transition-colors"
             >
               VIEW ALL <ArrowRight size={14} />
             </Link>
           </div>
         </AnimatedSection>
 
+        {/* 3 Product Grid matching Image 1: APEX, VANTA, PULSE */}
         <AnimatedSection>
           <ProductGrid products={products.slice(0, 3)} columns={3} />
         </AnimatedSection>
 
-        <div className="mt-8 text-center sm:hidden">
-          <Link
-            to="/shop"
-            className="inline-flex items-center gap-2 text-xs font-bold tracking-[0.15em] text-lywaro-gray hover:text-white transition-colors"
-          >
-            VIEW ALL <ArrowRight size={14} />
-          </Link>
-        </div>
-      </section>
-
-      {/* New Arrivals */}
-      <section className="py-20 lg:py-32 px-4 sm:px-6 lg:px-8 bg-lywaro-dark">
-        <div className="max-w-7xl mx-auto">
-          <AnimatedSection>
-            <div className="flex items-end justify-between mb-12">
-              <div>
-                <div className="flex items-center gap-3 mb-4">
-                  <div className="w-8 h-px bg-lywaro-crimson" />
-                  <span className="text-[10px] font-bold tracking-[0.3em] text-lywaro-crimson">JUST DROPPED</span>
-                </div>
-                <h2 className="text-3xl lg:text-5xl font-black tracking-tight text-white">NEW ARRIVALS</h2>
+        {/* 4 Feature Columns directly under Collection (matching Image 1) */}
+        <AnimatedSection className="mt-20 pt-12 border-t border-white/5">
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-8 md:gap-6 text-center">
+            <div className="flex flex-col items-center group">
+              <div className="w-14 h-14 rounded-full bg-white/5 flex items-center justify-center mb-4 text-lywaro-crimson border border-lywaro-crimson/20 group-hover:border-lywaro-crimson group-hover:scale-110 transition-all duration-300">
+                <Rocket size={24} strokeWidth={1.5} />
               </div>
+              <h4 className="text-xs font-black tracking-[0.2em] text-white mb-1.5 uppercase">ENGINEERED FOR MOTION</h4>
+              <p className="text-[11px] text-white/40 max-w-[200px] leading-relaxed">Performance built without compromise.</p>
             </div>
-          </AnimatedSection>
-          <AnimatedSection>
-            <ProductGrid products={products.slice(0, 3)} columns={3} />
-          </AnimatedSection>
-        </div>
-      </section>
 
-      {/* Categories */}
-      <section className="py-20 lg:py-32 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto">
-        <AnimatedSection>
-          <div className="text-center mb-12">
-            <h2 className="text-2xl sm:text-3xl lg:text-5xl font-black tracking-tight text-white">SHOP BY CATEGORY</h2>
+            <div className="flex flex-col items-center group">
+              <div className="w-14 h-14 rounded-full bg-white/5 flex items-center justify-center mb-4 text-lywaro-crimson border border-lywaro-crimson/20 group-hover:border-lywaro-crimson group-hover:scale-110 transition-all duration-300">
+                <ShieldCheck size={24} strokeWidth={1.5} />
+              </div>
+              <h4 className="text-xs font-black tracking-[0.2em] text-white mb-1.5 uppercase">PREMIUM QUALITY</h4>
+              <p className="text-[11px] text-white/40 max-w-[200px] leading-relaxed">Finest materials. Superior craftsmanship.</p>
+            </div>
+
+            <div className="flex flex-col items-center group">
+              <div className="w-14 h-14 rounded-full bg-white/5 flex items-center justify-center mb-4 text-lywaro-crimson border border-lywaro-crimson/20 group-hover:border-lywaro-crimson group-hover:scale-110 transition-all duration-300">
+                <Truck size={24} strokeWidth={1.5} />
+              </div>
+              <h4 className="text-xs font-black tracking-[0.2em] text-white mb-1.5 uppercase">FAST & SECURE DELIVERY</h4>
+              <p className="text-[11px] text-white/40 max-w-[200px] leading-relaxed">Delivering speed. Delivering trust.</p>
+            </div>
+
+            <div className="flex flex-col items-center group">
+              <div className="w-14 h-14 rounded-full bg-white/5 flex items-center justify-center mb-4 text-lywaro-crimson border border-lywaro-crimson/20 group-hover:border-lywaro-crimson group-hover:scale-110 transition-all duration-300">
+                <Headphones size={24} strokeWidth={1.5} />
+              </div>
+              <h4 className="text-xs font-black tracking-[0.2em] text-white mb-1.5 uppercase">DEDICATED SUPPORT</h4>
+              <p className="text-[11px] text-white/40 max-w-[200px] leading-relaxed">We're here for you. Always.</p>
+            </div>
           </div>
         </AnimatedSection>
-        <AnimatedSection>
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-            {categories.map((cat) => (
-              <Link
-                key={cat.id}
-                to={`/shop?category=${cat.name}`}
-                className="group relative aspect-[4/3] bg-lywaro-charcoal border border-white/5 hover:border-lywaro-crimson/30 overflow-hidden transition-all duration-500 flex items-end p-6"
-              >
-                <div className="absolute inset-0 bg-gradient-to-t from-black/80 to-transparent" />
-                <div className="relative z-10">
-                  <p className="text-3xl mb-2">{cat.icon}</p>
-                  <h3 className="text-xl font-black tracking-wider text-white group-hover:text-lywaro-crimson transition-colors">
-                    {cat.name.toUpperCase()}
-                  </h3>
-                  <p className="text-xs text-lywaro-gray mt-1">{cat.description}</p>
-                </div>
-                <ArrowUpRight
-                  size={20}
-                  className="absolute top-4 right-4 text-white/20 group-hover:text-lywaro-crimson transition-colors"
-                />
-              </Link>
-            ))}
-          </div>
-        </AnimatedSection>
-      </section>
-
-      {/* Benefits Section */}
-      <section className="py-16 border-y border-white/5 bg-lywaro-dark/50">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <AnimatedSection>
-            <div className="grid grid-cols-2 md:grid-cols-4 gap-8 md:gap-6 text-center">
-              <div className="flex flex-col items-center">
-                <div className="w-12 h-12 rounded-full bg-white/5 flex items-center justify-center mb-4 text-lywaro-crimson border border-white/10">
-                  <Activity size={22} />
-                </div>
-                <h4 className="text-xs md:text-sm font-black tracking-[0.2em] text-white mb-1">ENGINEERED</h4>
-                <p className="text-[10px] md:text-xs font-bold tracking-[0.15em] text-lywaro-gray">FOR MOTION</p>
-              </div>
-
-              <div className="flex flex-col items-center">
-                <div className="w-12 h-12 rounded-full bg-white/5 flex items-center justify-center mb-4 text-lywaro-crimson border border-white/10">
-                  <ShieldCheck size={22} />
-                </div>
-                <h4 className="text-xs md:text-sm font-black tracking-[0.2em] text-white mb-1">PREMIUM</h4>
-                <p className="text-[10px] md:text-xs font-bold tracking-[0.15em] text-lywaro-gray">QUALITY</p>
-              </div>
-
-              <div className="flex flex-col items-center">
-                <div className="w-12 h-12 rounded-full bg-white/5 flex items-center justify-center mb-4 text-lywaro-crimson border border-white/10">
-                  <Truck size={22} />
-                </div>
-                <h4 className="text-xs md:text-sm font-black tracking-[0.2em] text-white mb-1">FAST & SECURE</h4>
-                <p className="text-[10px] md:text-xs font-bold tracking-[0.15em] text-lywaro-gray">DELIVERY</p>
-              </div>
-
-              <div className="flex flex-col items-center">
-                <div className="w-12 h-12 rounded-full bg-white/5 flex items-center justify-center mb-4 text-lywaro-crimson border border-white/10">
-                  <Headphones size={22} />
-                </div>
-                <h4 className="text-xs md:text-sm font-black tracking-[0.2em] text-white mb-1">DEDICATED</h4>
-                <p className="text-[10px] md:text-xs font-bold tracking-[0.15em] text-lywaro-gray">SUPPORT</p>
-              </div>
-            </div>
-          </AnimatedSection>
-        </div>
       </section>
 
       {/* Brand Story */}
