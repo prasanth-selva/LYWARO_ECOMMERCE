@@ -1,4 +1,4 @@
-import React, { useRef, useState, useCallback, useEffect, Suspense } from 'react';
+import React, { useRef, useCallback, useState, Suspense } from 'react';
 import { Canvas } from '@react-three/fiber';
 import SneakerModel from './SneakerModel';
 import Environment from './Environment';
@@ -10,89 +10,81 @@ interface SneakerSceneProps {
 }
 
 export default function SneakerScene({ className = '', onInteractionStart }: SneakerSceneProps) {
-  const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 });
+  const reducedMotion = useReducedMotion();
+
+  /* ── drag state ── */
   const [isDragging, setIsDragging] = useState(false);
   const [dragOffset, setDragOffset] = useState(0);
   const [velocity, setVelocity] = useState(0);
-  const [zoom, setZoom] = useState(4);
-  const dragStart = useRef({ x: 0, offset: 0, time: 0 });
-  const lastPointer = useRef({ x: 0, time: 0 });
-  const reducedMotion = useReducedMotion();
-  const containerRef = useRef<HTMLDivElement>(null);
+  const [zoom, setZoom] = useState(4.2);
 
-  // Mouse move → camera-look (when not dragging)
+  const dragStart  = useRef({ x: 0, offset: 0 });
+  const lastPtr    = useRef({ x: 0, t: 0 });
+  const touchPinch = useRef({ dist: 0, zoom: 4.2 });
+
+  /* ── mouse position for idle look-at ── */
+  const [mouseXY, setMouseXY] = useState({ x: 0, y: 0 });
   const handlePointerMove = useCallback((e: React.PointerEvent) => {
     const now = Date.now();
-    const dt = Math.max(now - lastPointer.current.time, 1);
-    const dx = e.clientX - lastPointer.current.x;
-    lastPointer.current = { x: e.clientX, time: now };
+    const dt  = Math.max(now - lastPtr.current.t, 1);
+    const dx  = e.clientX - lastPtr.current.x;
+    lastPtr.current = { x: e.clientX, t: now };
 
     if (isDragging) {
       const totalDx = (e.clientX - dragStart.current.x) / window.innerWidth;
-      const newOffset = dragStart.current.offset + totalDx * Math.PI * 2;
-      setDragOffset(newOffset);
-      // Track velocity for inertia
-      setVelocity(dx / dt * 16);
+      setDragOffset(dragStart.current.offset + totalDx * Math.PI * 2.4);
+      setVelocity((dx / dt) * 18);
     } else {
-      const x = (e.clientX / window.innerWidth) * 2 - 1;
-      const y = -(e.clientY / window.innerHeight) * 2 + 1;
-      setMousePosition({ x, y });
+      const nx = (e.clientX / window.innerWidth)  * 2 - 1;
+      const ny = -(e.clientY / window.innerHeight) * 2 + 1;
+      setMouseXY({ x: nx, y: ny });
     }
   }, [isDragging]);
 
-  // Pointer down
   const handlePointerDown = useCallback((e: React.PointerEvent) => {
-    // Ignore right-click
     if (e.button !== 0) return;
     setIsDragging(true);
     setVelocity(0);
-    dragStart.current = { x: e.clientX, offset: dragOffset, time: Date.now() };
-    lastPointer.current = { x: e.clientX, time: Date.now() };
+    dragStart.current = { x: e.clientX, offset: dragOffset };
+    lastPtr.current   = { x: e.clientX, t: Date.now() };
     onInteractionStart?.();
+    (e.currentTarget as HTMLElement).setPointerCapture(e.pointerId);
   }, [dragOffset, onInteractionStart]);
 
-  // Pointer up
-  const handlePointerUp = useCallback(() => {
-    setIsDragging(false);
-  }, [dragOffset]);
+  const handlePointerUp = useCallback(() => setIsDragging(false), []);
 
-  // Double-click to reset
   const handleDoubleClick = useCallback(() => {
     setDragOffset(0);
     setVelocity(0);
-    setZoom(4);
+    setZoom(4.2);
   }, []);
 
-  // Scroll to zoom
   const handleWheel = useCallback((e: React.WheelEvent) => {
     e.preventDefault();
-    setZoom(prev => Math.max(2.5, Math.min(6, prev + e.deltaY * 0.005)));
+    setZoom(z => Math.max(2.8, Math.min(6.5, z + e.deltaY * 0.005)));
   }, []);
 
-  // Touch: pinch to zoom
-  const touchState = useRef({ dist: 0, zoom: 4 });
+  /* touch pinch-zoom */
   const handleTouchStart = useCallback((e: React.TouchEvent) => {
     if (e.touches.length === 2) {
       const dx = e.touches[0].clientX - e.touches[1].clientX;
       const dy = e.touches[0].clientY - e.touches[1].clientY;
-      touchState.current = { dist: Math.hypot(dx, dy), zoom };
+      touchPinch.current = { dist: Math.hypot(dx, dy), zoom };
     }
   }, [zoom]);
 
   const handleTouchMove = useCallback((e: React.TouchEvent) => {
     if (e.touches.length === 2) {
-      const dx = e.touches[0].clientX - e.touches[1].clientX;
-      const dy = e.touches[0].clientY - e.touches[1].clientY;
+      const dx   = e.touches[0].clientX - e.touches[1].clientX;
+      const dy   = e.touches[0].clientY - e.touches[1].clientY;
       const dist = Math.hypot(dx, dy);
-      const scale = touchState.current.dist / dist;
-      const newZoom = Math.max(2.5, Math.min(6, touchState.current.zoom * scale));
-      setZoom(newZoom);
+      const s    = touchPinch.current.dist / dist;
+      setZoom(Math.max(2.8, Math.min(6.5, touchPinch.current.zoom * s)));
     }
   }, []);
 
   return (
     <div
-      ref={containerRef}
       className={`w-full h-full select-none ${className}`}
       onPointerMove={handlePointerMove}
       onPointerDown={handlePointerDown}
@@ -106,7 +98,7 @@ export default function SneakerScene({ className = '', onInteractionStart }: Sne
     >
       <Canvas
         shadows
-        camera={{ position: [0, 1, 4], fov: 40 }}
+        camera={{ position: [0, 0.6, 4.2], fov: 38 }}
         dpr={[1, 2]}
         gl={{ antialias: true, alpha: true }}
         style={{ background: 'transparent' }}
@@ -114,13 +106,12 @@ export default function SneakerScene({ className = '', onInteractionStart }: Sne
         <Suspense fallback={null}>
           <Environment />
           <SneakerModel
-            mousePosition={mousePosition}
+            mouseXY={mouseXY}
             isDragging={isDragging}
             dragOffset={dragOffset}
             velocity={velocity}
             zoom={zoom}
             reducedMotion={reducedMotion}
-            onInteractionStart={onInteractionStart}
           />
         </Suspense>
       </Canvas>

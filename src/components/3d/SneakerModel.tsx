@@ -1,131 +1,101 @@
-import React, { useRef, useState, useEffect } from 'react';
+import React, { useRef, useEffect } from 'react';
 import { useFrame, useThree } from '@react-three/fiber';
 import { useGLTF } from '@react-three/drei';
 import * as THREE from 'three';
 
 interface SneakerModelProps {
-  mousePosition: { x: number; y: number };
-  isDragging: boolean;
-  dragOffset: number;
-  velocity: number;
-  zoom: number;
+  mouseXY:     { x: number; y: number };
+  isDragging:  boolean;
+  dragOffset:  number;
+  velocity:    number;
+  zoom:        number;
   reducedMotion: boolean;
-  onInteractionStart?: () => void;
 }
 
 export default function SneakerModel({
-  mousePosition,
-  isDragging,
-  dragOffset,
-  velocity,
-  zoom,
-  reducedMotion,
-  onInteractionStart,
+  mouseXY, isDragging, dragOffset, velocity, zoom, reducedMotion,
 }: SneakerModelProps) {
   const { scene } = useGLTF('/models/lywaro-apex.glb');
-  const modelRef = useRef<THREE.Group>(null);
+  const groupRef  = useRef<THREE.Group>(null);
   const { camera } = useThree();
-  const [hasInteracted, setHasInteracted] = useState(false);
 
-  // Rotation state refs (avoid re-renders)
-  const rotY = useRef(0);
-  const rotX = useRef(0);
-  const inertiaVel = useRef(0);
-  const currentZoom = useRef(4);
+  /* ── smooth internal state stored in refs (no re-renders) ── */
+  const rY     = useRef(0);   // current Y rotation
+  const rX     = useRef(0);   // current X rotation
+  const inertia = useRef(0);  // spin inertia after drag release
+  const camZ   = useRef(4.2); // current camera Z
 
-  // Mark first interaction
+  /* Store inertia when drag ends */
   useEffect(() => {
-    if (isDragging && !hasInteracted) {
-      setHasInteracted(true);
-      onInteractionStart?.();
-    }
-  }, [isDragging, hasInteracted, onInteractionStart]);
-
-  // When drag ends with velocity, store inertia
-  useEffect(() => {
-    if (!isDragging && Math.abs(velocity) > 0.01) {
-      inertiaVel.current = velocity * 1.5;
+    if (!isDragging && Math.abs(velocity) > 0.005) {
+      inertia.current = velocity * 1.2;
     }
   }, [isDragging, velocity]);
 
-  // Reset when dragOffset goes to 0 (double-click reset)
-  useEffect(() => {
-    if (!isDragging && Math.abs(dragOffset) < 0.001) {
-      rotY.current = THREE.MathUtils.lerp(rotY.current, 0, 0.05);
-      rotX.current = THREE.MathUtils.lerp(rotX.current, 0, 0.05);
-      inertiaVel.current = 0;
-    }
-  }, [dragOffset, isDragging]);
-
   useFrame((state, delta) => {
-    if (!modelRef.current) return;
-    const time = state.clock.getElapsedTime();
-    const clampedDelta = Math.min(delta, 0.05);
+    if (!groupRef.current) return;
+    const dt  = Math.min(delta, 0.05);
+    const t   = state.clock.getElapsedTime();
 
-    // Calculate base rotation targets based on mode
-    let targetY = 0;
-    let targetX = 0;
+    /* ---------- target rotation ---------- */
+    let tY = 0;
+    let tX = 0;
 
     if (isDragging) {
-      // Direct drag control + mouse tilt
-      targetY = dragOffset;
-      targetX = mousePosition.y * 0.2;
-      inertiaVel.current = 0;
-    } else if (Math.abs(inertiaVel.current) > 0.001) {
-      // Inertia decay after drag release
-      rotY.current += inertiaVel.current * clampedDelta;
-      inertiaVel.current *= 0.92;
-      targetY = rotY.current;
-      targetX = mousePosition.y * 0.15;
+      /* Direct drag — tight follow */
+      tY = dragOffset;
+      tX = mouseXY.y * 0.18;
+      inertia.current = 0;
+    } else if (Math.abs(inertia.current) > 0.0005) {
+      /* Inertia coast after release */
+      rY.current += inertia.current * dt;
+      inertia.current *= 0.88;          // friction / decay
+      tY = rY.current;
+      tX = mouseXY.y * 0.12;
     } else {
-      // Idle & Mouse Interaction
-      // 1. Subtle mouse interaction (horizontal -> Y rot, vertical -> X tilt)
-      const mouseRotY = mousePosition.x * 0.35;
-      const mouseTiltX = mousePosition.y * 0.18;
-
-      // 2. Subtle idle breathing/oscillation (NOT continuous 360 spinning)
-      const idleOscillationY = reducedMotion ? 0 : Math.sin(time * 0.7) * 0.08;
-      const idleOscillationX = reducedMotion ? 0 : Math.cos(time * 0.9) * 0.03;
-
-      targetY = dragOffset + mouseRotY + idleOscillationY;
-      targetX = mouseTiltX + idleOscillationX;
+      /* Idle — gentle mouse-parallax + breathing oscillation */
+      const idleY = reducedMotion ? 0 : Math.sin(t * 0.55) * 0.055;
+      const idleX = reducedMotion ? 0 : Math.cos(t * 0.75) * 0.022;
+      tY = dragOffset + mouseXY.x * 0.32 + idleY;
+      tX = mouseXY.y * 0.15 + idleX;
     }
 
-    // Clamp X rotation to prevent full flip (±60°)
-    targetX = THREE.MathUtils.clamp(targetX, -Math.PI / 3, Math.PI / 3);
+    /* Clamp vertical tilt */
+    tX = THREE.MathUtils.clamp(tX, -Math.PI / 3.5, Math.PI / 3.5);
 
-    // Apply rotation smoothly with damping
-    rotY.current = THREE.MathUtils.lerp(rotY.current, targetY, isDragging ? 0.2 : 0.06);
-    rotX.current = THREE.MathUtils.lerp(rotX.current, targetX, isDragging ? 0.2 : 0.06);
+    /* Smooth damp — crispy during drag, softer during idle */
+    const lerpY = isDragging ? 0.22 : 0.055;
+    const lerpX = isDragging ? 0.18 : 0.055;
+    rY.current = THREE.MathUtils.lerp(rY.current, tY, lerpY);
+    rX.current = THREE.MathUtils.lerp(rX.current, tX, lerpX);
 
-    modelRef.current.rotation.y = rotY.current;
-    modelRef.current.rotation.x = rotX.current;
+    groupRef.current.rotation.y = rY.current;
+    groupRef.current.rotation.x = rX.current;
 
-    // --- SUBTLE IDLE FLOAT & BREATHING ---
+    /* Idle float */
     if (!reducedMotion) {
-      const floatY = Math.sin(time * 1.2) * 0.03;
-      const floatX = Math.sin(time * 0.8) * 0.008;
-      modelRef.current.position.y = THREE.MathUtils.lerp(modelRef.current.position.y, floatY, 0.05);
-      modelRef.current.position.x = THREE.MathUtils.lerp(modelRef.current.position.x, floatX, 0.05);
+      const floatY = Math.sin(t * 1.1) * 0.028;
+      const floatX = Math.sin(t * 0.7) * 0.007;
+      groupRef.current.position.y = THREE.MathUtils.lerp(groupRef.current.position.y, floatY, 0.04);
+      groupRef.current.position.x = THREE.MathUtils.lerp(groupRef.current.position.x, floatX, 0.04);
     }
 
-    // --- CAMERA ZOOM ---
-    currentZoom.current = THREE.MathUtils.lerp(currentZoom.current, zoom, 0.08);
-    camera.position.z = currentZoom.current;
+    /* Camera zoom smooth */
+    camZ.current = THREE.MathUtils.lerp(camZ.current, zoom, 0.07);
+    (camera as THREE.PerspectiveCamera).position.z = camZ.current;
 
-    // --- SCALE INTERACTION FEEDBACK ---
-    const targetScale = isDragging ? 1.02 : 1;
-    const currentScale = modelRef.current.scale.x;
-    const newScale = THREE.MathUtils.lerp(currentScale, targetScale, 0.08);
-    modelRef.current.scale.set(newScale, newScale, newScale);
+    /* Slight scale pulse when dragging */
+    const targetScale = isDragging ? 1.025 : 1.0;
+    const cs = groupRef.current.scale.x;
+    const ns = THREE.MathUtils.lerp(cs, targetScale, 0.08);
+    groupRef.current.scale.setScalar(ns);
   });
 
   return (
-    <group ref={modelRef}>
+    <group ref={groupRef}>
       <primitive object={scene} />
     </group>
   );
 }
 
 useGLTF.preload('/models/lywaro-apex.glb');
-
