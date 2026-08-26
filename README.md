@@ -1,163 +1,184 @@
-# LYWARO — Move Different
+# LYWARO — Interactive 3D E-Commerce Platform
 
-Premium sneaker e-commerce platform built with the MERN stack.
+> An interactive 3D footwear e-commerce platform built with the MERN stack, featuring WebGL-based product visualization for enhanced online shopping experiences.
 
 ## Tech Stack
 
-- **Frontend:** React, TypeScript, Tailwind CSS, Three.js, Framer Motion, Wouter
-- **Backend:** Node.js, Express.js, MongoDB, Mongoose
-- **Auth:** JWT, bcryptjs, HTTP-only cookies
-- **Payment:** Razorpay-ready (test mode)
+| Layer | Technology |
+|-------|-----------|
+| Frontend | React 19, TypeScript, Tailwind CSS 4, Three.js |
+| Backend | Node.js, Express.js |
+| Database | MongoDB + Mongoose |
+| Auth | JWT + bcryptjs |
+| 3D | Three.js (GLB model viewer) |
+| Deploy | Vercel (frontend + serverless API) |
 
-## Prerequisites
+## Features
+
+### Customer
+- Interactive 3D product viewer (drag, zoom, rotate)
+- Product browsing with search, filters, and sorting
+- Cart with size/color selection
+- Wishlist management
+- Checkout with address management
+- Order history and tracking
+- User authentication (register, login, profile)
+
+### Admin
+- Dashboard with revenue, orders, products, customers
+- Product CRUD with image management
+- Order management with status updates
+- User management
+
+## Quick Start
+
+### Prerequisites
 
 - Node.js 18+
 - MongoDB (local or Atlas)
 - pnpm
 
-## Setup
-
-### 1. Install dependencies
+### Local Development
 
 ```bash
+# Install dependencies
 pnpm install
-```
 
-### 2. Configure environment
-
-```bash
+# Set up environment
 cp .env.example .env
-```
+# Edit .env with your MongoDB URI and JWT secret
 
-Edit `.env` with your MongoDB URI and a secure JWT secret.
-
-### 3. Start MongoDB
-
-```bash
-# Local
-mongod
-
-# Or use MongoDB Atlas connection string in .env
-```
-
-### 4. Seed the database
-
-```bash
+# Seed the database
 pnpm seed
-```
 
-This creates:
-- **Admin account:** `admin@lywaro.com` / `admin123`
-- **Test account:** `user@lywaro.com` / `user123`
-- **4 LYWARO products:** APEX, VECTOR, SHIFT, CORE + 2 more
+# Start the backend (port 5000)
+pnpm server:dev
 
-### 5. Start the dev servers
-
-```bash
-# Frontend (Vite, port 3000)
+# Start the frontend (port 3000) — in another terminal
 pnpm dev
-
-# Backend (Express, port 5000) — in another terminal
-pnpm server
 ```
 
-### 6. Open
+Open http://localhost:3000
 
-- **Storefront:** http://localhost:3000
-- **Admin:** http://localhost:3000/admin
+### Default Credentials
+
+| Role | Email | Password |
+|------|-------|----------|
+| Admin | admin@lywaro.com | admin123 |
+| User | user@lywaro.com | user123 |
+
+## Environment Variables
+
+| Variable | Description | Default |
+|----------|-------------|---------|
+| `PORT` | Backend server port | 5000 |
+| `MONGO_URI` | MongoDB connection string | mongodb://localhost:27017/lywaro |
+| `JWT_SECRET` | Secret key for JWT tokens | — |
+| `JWT_EXPIRES_IN` | Token expiration | 7d |
+| `CLIENT_URL` | Frontend URL for CORS | http://localhost:3000 |
+| `RAZORPAY_KEY_ID` | Razorpay API key | — |
+| `RAZORPAY_KEY_SECRET` | Razorpay API secret | — |
 
 ## API Endpoints
 
 ### Authentication
 | Method | Endpoint | Description |
 |--------|----------|-------------|
-| POST | /api/auth/register | Register user |
+| POST | /api/auth/register | Register a new user |
 | POST | /api/auth/login | Login |
 | POST | /api/auth/logout | Logout |
-| GET | /api/auth/me | Current user |
-| PUT | /api/auth/profile | Update profile |
-| PUT | /api/auth/change-password | Change password |
+| GET | /api/auth/me | Get current user |
 
 ### Products
 | Method | Endpoint | Description |
 |--------|----------|-------------|
-| GET | /api/products | List products (pagination, filters) |
-| GET | /api/products/:id | Product by ID |
-| GET | /api/products/slug/:slug | Product by slug |
-| GET | /api/products/search?q=... | Search products |
+| GET | /api/products | List products (with filters) |
+| GET | /api/products/:id | Get product by ID |
+| GET | /api/products/slug/:slug | Get product by slug |
 | GET | /api/products/featured | Featured products |
-| GET | /api/products/bestsellers | Bestsellers |
+| GET | /api/products/bestsellers | Bestseller products |
 | GET | /api/products/new-arrivals | New arrivals |
+| GET | /api/products/search?q=term | Search products |
 
-### Cart (authenticated)
+### Cart
 | Method | Endpoint | Description |
 |--------|----------|-------------|
 | GET | /api/cart | Get cart |
 | POST | /api/cart | Add to cart |
-| PUT | /api/cart/:itemId | Update quantity |
-| DELETE | /api/cart/:itemId | Remove item |
-| DELETE | /api/cart | Clear cart |
+| PUT | /api/cart/:itemId | Update cart item |
+| DELETE | /api/cart/:itemId | Remove from cart |
 
-### Wishlist (authenticated)
+### Wishlist
 | Method | Endpoint | Description |
 |--------|----------|-------------|
 | GET | /api/wishlist | Get wishlist |
 | POST | /api/wishlist/:productId | Add to wishlist |
 | DELETE | /api/wishlist/:productId | Remove from wishlist |
 
-### Orders (authenticated)
+### Orders
 | Method | Endpoint | Description |
 |--------|----------|-------------|
 | POST | /api/orders | Create order |
-| GET | /api/orders | User orders |
-| GET | /api/orders/:id | Order detail |
+| GET | /api/orders | Get user orders |
+| GET | /api/orders/:id | Get order details |
 
-### Payment (authenticated)
-| Method | Endpoint | Description |
-|--------|----------|-------------|
-| POST | /api/payment/create-order | Create payment order |
-| POST | /api/payment/verify | Verify payment |
-
-### Admin (admin only)
+### Admin (requires admin role)
 | Method | Endpoint | Description |
 |--------|----------|-------------|
 | GET | /api/admin/dashboard | Dashboard stats |
+| GET | /api/admin/users | List users |
+| PUT | /api/admin/users/:id/toggle | Toggle user status |
 | POST | /api/products | Create product |
 | PUT | /api/products/:id | Update product |
 | DELETE | /api/products/:id | Delete product |
-| GET | /api/admin/users | List users |
-| GET | /api/orders/admin/all | All orders |
-| PUT | /api/orders/admin/:id/status | Update order status |
+
+## Deployment
+
+### Vercel
+
+1. Push to GitHub
+2. Import in Vercel dashboard
+3. Set environment variables:
+   - `MONGO_URI` — MongoDB Atlas connection string
+   - `JWT_SECRET` — Secure random string
+   - `CLIENT_URL` — Your Vercel domain
+4. Deploy
+
+The API runs as a Vercel serverless function at `/api/*`.
+
+### MongoDB Atlas (Free Tier)
+
+1. Create account at mongodb.com
+2. Create a free M0 cluster
+3. Create a database user
+4. Whitelist all IPs (0.0.0.0/0) for serverless
+5. Copy the connection string to `MONGO_URI`
 
 ## Project Structure
 
 ```
-lywaro/
-├── client/                 # React frontend
-│   ├── src/
-│   │   ├── components/     # UI components
-│   │   ├── contexts/       # React contexts (Auth, Store, Theme)
-│   │   ├── pages/          # Route pages
-│   │   ├── services/       # API service layer
-│   │   └── ...
-│   └── public/             # Static assets (models, images)
-├── server/                 # Express backend
-│   ├── config/             # Database config
-│   ├── controllers/        # Route handlers
-│   ├── middleware/          # Auth, error handling
-│   ├── models/             # Mongoose schemas
-│   ├── routes/             # Express routes
-│   ├── utils/              # Token helpers
-│   ├── seed.js             # Database seeder
-│   └── server.js           # Entry point
-└── .env.example
-```
-
-## Production
-
-```bash
-pnpm build          # Build frontend
-pnpm start          # Start production server (serves frontend + API)
+LYWARO_ECOMMERCE/
+├── api/
+│   └── index.js          # Vercel serverless function
+├── client/
+│   ├── public/            # Static assets (SVGs, GLB model)
+│   └── src/
+│       ├── components/    # React components
+│       ├── contexts/      # React Context (Auth, Store)
+│       ├── pages/         # Page components
+│       ├── services/      # API service layer
+│       └── App.tsx
+├── server/
+│   ├── config/            # MongoDB connection
+│   ├── controllers/       # Route handlers
+│   ├── middleware/         # Auth, error handling
+│   ├── models/            # Mongoose schemas
+│   ├── routes/            # Express routes
+│   ├── seed.js            # Database seeder
+│   └── server.js          # Express server (local dev)
+├── vercel.json            # Vercel configuration
+├── vite.config.ts         # Vite configuration
+└── package.json
 ```
 
 ## License

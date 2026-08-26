@@ -1,0 +1,1 @@
+import{h as e}from"./index-CakzsiZX.js";const t={getAddresses:()=>e.get("/users/addresses"),addAddress:s=>e.post("/users/addresses",s),updateAddress:(s,d)=>e.put(`/users/addresses/${s}`,d),deleteAddress:s=>e.delete(`/users/addresses/${s}`)};export{t as u};

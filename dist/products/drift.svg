@@ -1,0 +1,11 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 400" fill="none">
+  <rect width="400" height="400" fill="#111211"/>
+  <rect x="20" y="20" width="360" height="360" fill="#1a1a1d" rx="0"/>
+  <path d="M58 260 Q54 230 98 220 L178 210 Q218 200 258 195 L318 190 Q358 188 368 200 L372 218 Q375 234 358 244 L338 254 Q312 264 252 269 L158 277 Q108 280 65 275 Z" fill="#f0e8e8" stroke="#d4c8c8" stroke-width="0.5"/>
+  <path d="M52 265 Q46 276 54 286 L368 270 Q376 267 370 260 L52 265Z" fill="#1a1d1a" stroke="#333" stroke-width="0.5"/>
+  <circle cx="280" cy="215" r="12" fill="none" stroke="#e8a0b0" stroke-width="1" opacity="0.5"/>
+  <circle cx="280" cy="215" r="5" fill="#e8a0b0" opacity="0.3"/>
+  <path d="M115 250 Q200 236 348 218" stroke="#e8a0b0" stroke-width="1.5" fill="none" opacity="0.4"/>
+  <text x="200" y="340" text-anchor="middle" font-family="monospace" font-size="10" fill="#f0e8e8" letter-spacing="3">LYWARO DRIFT</text>
+  <text x="200" y="358" text-anchor="middle" font-family="monospace" font-size="8" fill="#555" letter-spacing="2">MOVE / LIFESTYLE</text>
+</svg>

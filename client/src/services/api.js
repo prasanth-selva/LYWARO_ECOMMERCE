@@ -1,4 +1,6 @@
-const API_BASE = "/api";
+// In development, Vite proxies /api to localhost:5000
+// In production on Vercel, /api is handled by serverless functions
+const API_BASE = import.meta.env.VITE_API_URL || "/api";
 
 class ApiClient {
   constructor() {

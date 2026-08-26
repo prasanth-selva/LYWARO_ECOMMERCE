@@ -1,0 +1,19 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 400" fill="none">
+  <rect width="400" height="400" fill="#111211"/>
+  <rect x="20" y="20" width="360" height="360" fill="#1a1d1a" rx="0"/>
+  <!-- Shoe body - runner silhouette -->
+  <path d="M50 255 Q48 225 90 215 L170 205 Q210 195 250 190 L310 185 Q355 182 370 195 L375 215 Q378 235 360 245 L340 255 Q310 265 250 270 L150 278 Q100 280 60 275 Z" fill="#b7b3a8" stroke="#B7B3A8" stroke-width="0.5"/>
+  <!-- Sole -->
+  <path d="M45 260 Q40 272 48 282 L370 265 Q378 262 372 255 L45 260Z" fill="#1a1d1a" stroke="#333" stroke-width="0.5"/>
+  <!-- Mesh pattern -->
+  <path d="M100 230 L130 225 L160 220 L190 215 L220 210 L250 205 L280 200 L310 195" stroke="#999" stroke-width="0.3" fill="none" opacity="0.4"/>
+  <path d="M100 240 L130 235 L160 230 L190 225 L220 220 L250 215 L280 210 L310 205" stroke="#999" stroke-width="0.3" fill="none" opacity="0.4"/>
+  <path d="M100 250 L130 245 L160 240 L190 235 L220 230 L250 225 L280 220 L310 215" stroke="#999" stroke-width="0.3" fill="none" opacity="0.4"/>
+  <!-- Accent stripe -->
+  <path d="M110 250 Q200 235 350 215" stroke="#B7B3A8" stroke-width="2" fill="none" opacity="0.5"/>
+  <!-- Toe highlight -->
+  <ellipse cx="360" cy="222" rx="16" ry="10" fill="#B7B3A8" opacity="0.2"/>
+  <!-- Label -->
+  <text x="200" y="340" text-anchor="middle" font-family="monospace" font-size="10" fill="#B7B3A8" letter-spacing="3">LYWARO VECTOR</text>
+  <text x="200" y="358" text-anchor="middle" font-family="monospace" font-size="8" fill="#555" letter-spacing="2">RUN / PERFORMANCE</text>
+</svg>
