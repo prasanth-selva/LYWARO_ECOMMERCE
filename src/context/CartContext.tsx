@@ -23,9 +23,25 @@ export function CartProvider({ children }: { children: ReactNode }) {
   const [items, setItems] = useState<CartItem[]>(() => {
     try {
       const stored = localStorage.getItem(CART_KEY);
-      return stored ? JSON.parse(stored) : [];
+      if (stored) return JSON.parse(stored);
+      // Default demo cart with 2 items as shown in image 1
+      return [
+        {
+          product: products[0],
+          size: 40,
+          color: 'Black / Crimson',
+          quantity: 2,
+        },
+      ];
     } catch {
-      return [];
+      return [
+        {
+          product: products[0],
+          size: 40,
+          color: 'Black / Crimson',
+          quantity: 2,
+        },
+      ];
     }
   });
   const [isOpen, setIsOpen] = useState(false);

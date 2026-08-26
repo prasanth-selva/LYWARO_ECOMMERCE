@@ -9,6 +9,7 @@ import { formatPrice } from '../utils/format';
 export default function Hero() {
   const [hasInteracted, setHasInteracted] = useState(false);
   const [mousePos, setMousePos] = useState({ x: 0, y: 0 });
+  const [selectedSize, setSelectedSize] = useState<number>(40);
   const [isMobile, setIsMobile] = useState(false);
   const reducedMotion = useReducedMotion();
   const sectionRef = useRef<HTMLElement>(null);
@@ -44,6 +45,8 @@ export default function Hero() {
     return () => window.removeEventListener('mousemove', handler);
   }, [reducedMotion, isMobile]);
 
+  const sizes = [35, 36, 37, 38, 39, 40, 41, 42, 43, 44, 45];
+
   return (
     <section
       ref={sectionRef}
@@ -52,7 +55,7 @@ export default function Hero() {
     >
       {/* Sticky hero container */}
       <div className="sticky top-0 h-screen w-full overflow-hidden">
-        {/* Cinematic volcanic hero background image */}
+        {/* Volcanic hero background image */}
         <motion.div
           className="absolute inset-0 bg-cover bg-center bg-no-repeat"
           style={{
@@ -60,37 +63,37 @@ export default function Hero() {
             y: reducedMotion ? 0 : bgY,
           }}
         >
-          {/* Subtle dark gradient overlays for high typography legibility while maintaining volcanic atmosphere */}
-          <div className="absolute inset-0 bg-gradient-to-r from-black/85 via-black/40 to-transparent md:from-black/75 md:via-black/30 md:to-transparent pointer-events-none" />
-          <div className="absolute inset-0 bg-gradient-to-t from-lywaro-black via-transparent to-black/50 pointer-events-none" />
+          {/* Subtle dark gradient overlays for legibility */}
+          <div className="absolute inset-0 bg-gradient-to-r from-black/80 via-black/30 to-transparent md:from-black/75 md:via-black/20 md:to-transparent pointer-events-none" />
+          <div className="absolute inset-0 bg-gradient-to-t from-lywaro-black via-transparent to-black/40 pointer-events-none" />
 
-          {/* Subtle crimson ambient glow accent */}
+          {/* Red crimson glow accent */}
           <div
-            className="absolute top-1/2 right-[15%] w-[350px] h-[350px] md:w-[500px] md:h-[500px] rounded-full opacity-[0.12] pointer-events-none blur-3xl"
+            className="absolute top-1/2 right-[20%] w-[400px] h-[400px] md:w-[600px] md:h-[600px] rounded-full opacity-[0.18] pointer-events-none blur-3xl"
             style={{
-              background: 'radial-gradient(circle, #D50000 0%, transparent 70%)',
+              background: 'radial-gradient(circle, #D50000 0%, transparent 75%)',
               transform: reducedMotion
                 ? 'translate(20%, -50%)'
-                : `translate(${20 + mousePos.x * 2}%, ${-50 + mousePos.y * 2}%)`,
+                : `translate(${20 + mousePos.x * 3}%, ${-50 + mousePos.y * 3}%)`,
               transition: 'transform 0.8s ease-out',
             }}
           />
         </motion.div>
 
-        {/* Large APEX background text */}
+        {/* APEX watermark background text */}
         <motion.div
           style={{ y: reducedMotion ? 0 : apexY, opacity }}
           className="absolute inset-0 flex items-center justify-center pointer-events-none select-none"
         >
           <span
-            className="text-[25vw] md:text-[20vw] lg:text-[15vw] font-black text-white/[0.02] tracking-[0.2em]"
+            className="text-[25vw] md:text-[20vw] lg:text-[16vw] font-black text-white/[0.03] tracking-[0.25em]"
             aria-hidden="true"
           >
             APEX
           </span>
         </motion.div>
 
-        {/* 3D Sneaker — centered on mobile, right on desktop */}
+        {/* 3D Sneaker */}
         <motion.div
           style={{
             scale: reducedMotion ? 1 : sneakerScale,
@@ -101,35 +104,34 @@ export default function Hero() {
           <div
             className={`
               w-full h-full
-              md:absolute md:right-[5%] md:top-[5%]
-              md:w-[70%] md:h-[80%] md:max-w-3xl
-              absolute right-0 top-[15%]
-              w-[85%] h-[50%] max-w-lg
+              md:absolute md:right-[2%] md:top-[0%]
+              md:w-[75%] md:h-[85%] md:max-w-4xl
+              absolute right-0 top-[12%]
+              w-[90%] h-[55%] max-w-xl
             `}
           >
             <SneakerScene onInteractionStart={() => setHasInteracted(true)} />
           </div>
         </motion.div>
 
-        {/* Hero Content — responsive layout */}
+        {/* Hero Content — Left side */}
         <motion.div
           style={{ y: reducedMotion ? 0 : contentY, opacity }}
-          className="absolute inset-0 flex flex-col z-10
-            px-5 pt-24 pb-32
-            md:justify-center md:px-12 lg:px-20 xl:px-24
+          className="absolute inset-0 flex flex-col justify-center z-10
+            px-6 md:px-12 lg:px-20 xl:px-24 pt-16 md:pt-0
           "
         >
           <div className="max-w-xl">
-            {/* Small label */}
+            {/* Top tag */}
             <motion.div
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.2, duration: 0.6 }}
-              className="flex items-center gap-3 mb-4 md:mb-6"
+              className="flex items-center gap-3 mb-2"
             >
-              <div className="w-8 h-px bg-lywaro-crimson" />
-              <span className="text-[10px] font-bold tracking-[0.3em] text-lywaro-crimson">
-                NEW DROP — 2026
+              <div className="w-6 h-px bg-lywaro-crimson" />
+              <span className="text-[11px] font-bold tracking-[0.25em] text-lywaro-crimson">
+                NEW DROP - 2026
               </span>
             </motion.div>
 
@@ -138,60 +140,51 @@ export default function Hero() {
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.3, duration: 0.6 }}
-              className="text-xs font-mono text-lywaro-gray tracking-widest mb-2"
+              className="text-xs font-mono text-white/50 tracking-widest mb-6"
             >
               LYWARO / 001
             </motion.p>
 
-            {/* Category */}
-            <motion.p
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 0.4, duration: 0.6 }}
-              className="text-[10px] font-bold tracking-[0.3em] text-lywaro-gray mb-4 md:mb-6"
-            >
-              ENGINEERED FOR MOTION
-            </motion.p>
-
-            {/* Main headline — smaller on mobile */}
+            {/* Headline */}
             <motion.h1
               initial={{ opacity: 0, y: 30 }}
               animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 0.5, duration: 0.8 }}
-              className="text-5xl sm:text-6xl md:text-7xl lg:text-8xl xl:text-9xl font-black tracking-tight leading-[0.9] mb-4 md:mb-6"
+              transition={{ delay: 0.4, duration: 0.8 }}
+              className="text-5xl sm:text-6xl md:text-7xl lg:text-8xl xl:text-9xl font-black tracking-tight leading-[0.9] mb-6"
             >
               <span className="text-white">MOVE</span>
               <br />
               <span className="text-lywaro-crimson">DIFFERENT.</span>
             </motion.h1>
 
-            {/* Description */}
+            {/* Subtitle */}
             <motion.p
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 0.7, duration: 0.6 }}
-              className="text-xs md:text-sm text-lywaro-gray max-w-sm leading-relaxed mb-6 md:mb-8"
+              transition={{ delay: 0.6, duration: 0.6 }}
+              className="text-xs md:text-sm text-white/70 max-w-md leading-relaxed mb-8 font-normal"
             >
-              Engineered for motion. Designed for those who refuse ordinary.
+              Engineered for motion.<br />
+              Designed for those who refuse ordinary.
             </motion.p>
 
-            {/* CTAs — stacked on mobile, inline on desktop */}
+            {/* CTAs */}
             <motion.div
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 0.9, duration: 0.6 }}
-              className="flex flex-col sm:flex-row items-stretch sm:items-center gap-3 sm:gap-4"
+              transition={{ delay: 0.8, duration: 0.6 }}
+              className="flex flex-row items-center gap-3 sm:gap-4"
             >
               <Link
                 to="/shop"
-                className="group flex items-center justify-center gap-2 bg-white text-black px-6 py-3.5 md:px-8 md:py-4 text-[11px] md:text-xs font-bold tracking-[0.15em] hover:bg-lywaro-crimson hover:text-white transition-all duration-300"
+                className="group flex items-center justify-center gap-2 bg-lywaro-crimson text-white px-7 py-3.5 rounded-full text-xs font-bold tracking-[0.15em] hover:bg-[#b00000] shadow-[0_0_25px_rgba(213,0,0,0.4)] transition-all duration-300"
               >
                 EXPLORE COLLECTION
                 <ArrowRight size={14} className="group-hover:translate-x-1 transition-transform" />
               </Link>
               <Link
                 to="/product/apex"
-                className="flex items-center justify-center gap-2 border border-white/20 text-white px-6 py-3.5 md:px-8 md:py-4 text-[11px] md:text-xs font-bold tracking-[0.15em] hover:border-white/50 transition-colors"
+                className="flex items-center justify-center gap-2 bg-black/40 backdrop-blur-sm border border-white/25 text-white px-7 py-3.5 rounded-full text-xs font-bold tracking-[0.15em] hover:border-white/60 hover:bg-black/60 transition-all duration-300"
               >
                 VIEW DETAILS
               </Link>
@@ -199,68 +192,75 @@ export default function Hero() {
           </div>
         </motion.div>
 
-        {/* Product info — bottom-right on desktop, bottom-center on mobile */}
+        {/* Product details overlay — Right side overlay (matches Image 1) */}
         <motion.div
           style={{ opacity }}
-          className="absolute bottom-20 md:bottom-16 lg:bottom-24 z-10
-            left-4 right-4 md:left-auto md:right-12 lg:right-16
-            text-center md:text-right
+          className="absolute bottom-24 md:bottom-24 lg:bottom-28 z-20
+            right-6 md:right-12 lg:right-20 text-left md:text-right max-w-xs
           "
         >
-          <p className="text-base md:text-lg lg:text-xl font-black tracking-wider text-white mb-1">LYWARO APEX</p>
-          <p className="text-xl md:text-2xl lg:text-3xl font-black text-white mb-2">{formatPrice(8499)}</p>
-          <p className="text-[11px] md:text-xs text-lywaro-gray tracking-wider mb-1">BLACK / CRIMSON</p>
-          <p className="text-[11px] md:text-xs text-lywaro-gray/50 tracking-wider mb-3 md:mb-4">
-            Sizes 35–45
+          <h2 className="text-lg sm:text-xl lg:text-2xl font-black tracking-wider text-white mb-0.5">
+            LYWARO APEX
+          </h2>
+          <p className="text-xl sm:text-2xl lg:text-3xl font-black text-white mb-2">
+            ₹8,499
+          </p>
+          <p className="text-[10px] sm:text-[11px] text-white/50 tracking-[0.2em] font-semibold mb-4 uppercase">
+            BLACK / CRIMSON
           </p>
 
-          {/* Interaction hint */}
-          {!hasInteracted && (
-            <motion.div
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              transition={{ delay: 2 }}
-              className="flex items-center gap-2 md:justify-end text-lywaro-gray/40"
-            >
-              {isMobile ? (
-                <>
-                  <Move size={12} />
-                  <span className="text-[10px] font-semibold tracking-[0.2em]">SWIPE TO ROTATE</span>
-                </>
-              ) : (
-                <>
-                  <RotateCcw size={12} />
-                  <span className="text-[10px] font-semibold tracking-[0.2em]">DRAG TO ROTATE</span>
-                  <span className="text-[10px] font-semibold tracking-[0.2em] text-lywaro-gray/20">· SCROLL TO ZOOM · DBL-CLICK TO RESET</span>
-                </>
-              )}
-            </motion.div>
-          )}
-          {hasInteracted && (
-            <motion.div
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              className="hidden md:flex items-center gap-2 justify-end text-lywaro-gray/25"
-            >
-              <Maximize2 size={10} />
-              <span className="text-[9px] font-semibold tracking-[0.2em]">SCROLL TO ZOOM · DBL-CLICK TO RESET</span>
-            </motion.div>
-          )}
+          {/* Size Selector Grid matching reference image */}
+          <div className="mb-4">
+            <p className="text-[10px] font-bold tracking-[0.25em] text-white/60 mb-2 uppercase">
+              SIZE
+            </p>
+            <div className="flex flex-wrap gap-1.5 justify-start md:justify-end items-center">
+              {sizes.map((sz) => {
+                const isSelected = sz === selectedSize;
+                return (
+                  <button
+                    key={sz}
+                    onClick={() => setSelectedSize(sz)}
+                    className={`text-[11px] font-bold transition-all duration-200 ${
+                      isSelected
+                        ? 'bg-lywaro-crimson text-white w-7 h-7 rounded-sm flex items-center justify-center border border-lywaro-crimson shadow-[0_0_10px_rgba(213,0,0,0.5)]'
+                        : 'text-white/60 hover:text-white px-1.5 py-1 text-[11px]'
+                    }`}
+                  >
+                    {sz}
+                  </button>
+                );
+              })}
+            </div>
+          </div>
+
+          {/* Drag to rotate hint with target crosshair icon */}
+          <div className="flex items-center gap-2 justify-start md:justify-end text-white/50 pt-1">
+            <div className="w-4 h-4 rounded-full border border-white/40 flex items-center justify-center">
+              <div className="w-1.5 h-1.5 rounded-full bg-white/80" />
+            </div>
+            <span className="text-[10px] font-bold tracking-[0.25em] text-white/70">
+              DRAG TO ROTATE
+            </span>
+          </div>
         </motion.div>
 
-        {/* Scroll indicator */}
+        {/* Scroll indicator matching Image 1 */}
         <motion.div
           style={{ opacity: reducedMotion ? 1 : scrollIndicatorOpacity }}
-          className="absolute bottom-6 md:bottom-8 left-1/2 -translate-x-1/2 z-10"
+          className="absolute bottom-6 md:bottom-8 left-1/2 -translate-x-1/2 z-20 flex flex-col items-center gap-1.5"
         >
-          <div className="flex flex-col items-center gap-2">
-            <span className="text-[10px] font-semibold tracking-[0.3em] text-lywaro-gray/40">SCROLL</span>
+          {/* Mouse outline icon */}
+          <div className="w-5 h-8 rounded-full border-2 border-white/40 flex justify-center pt-1.5">
             <motion.div
               animate={{ y: [0, 6, 0] }}
               transition={{ duration: 1.5, repeat: Infinity }}
-              className="w-px h-6 md:h-8 bg-gradient-to-b from-lywaro-gray/40 to-transparent"
+              className="w-1 h-1.5 rounded-full bg-white/70"
             />
           </div>
+          <span className="text-[9px] font-bold tracking-[0.3em] text-white/50">
+            SCROLL
+          </span>
         </motion.div>
       </div>
     </section>

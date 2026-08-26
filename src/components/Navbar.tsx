@@ -48,10 +48,13 @@ export default function Navbar() {
             {/* Logo */}
             <Link
               to="/"
-              className="text-xl lg:text-2xl font-black tracking-[0.3em] text-white hover:text-lywaro-crimson transition-colors"
+              className="flex items-center gap-2.5 text-xl lg:text-2xl font-black tracking-[0.3em] text-white hover:text-lywaro-crimson transition-colors group"
               aria-label="LYWARO home"
             >
-              LYWARO
+              <svg className="w-6 h-6 lg:w-7 lg:h-7 text-lywaro-crimson fill-current transition-transform duration-300 group-hover:scale-110" viewBox="0 0 36 36">
+                <path d="M4 8 L18 28 L24 19 L16 11 Z M18 28 L32 8 L27 8 L18 21 Z" />
+              </svg>
+              <span>LYWARO</span>
             </Link>
 
             {/* Desktop Nav */}
