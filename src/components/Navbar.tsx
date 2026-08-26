@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
-import { Link, useLocation, useNavigate } from 'react-router-dom';
-import { Search, Heart, ShoppingBag, User, Menu, X } from 'lucide-react';
+import { Link, useLocation } from 'react-router-dom';
+import { Search, Heart, ShoppingBag, Menu, X } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useCart } from '../context/CartContext';
 import { useWishlist } from '../context/WishlistContext';
@@ -20,10 +20,9 @@ export default function Navbar() {
   const { getCount } = useWishlist();
   const { openSearch } = useSearch();
   const location = useLocation();
-  const navigate = useNavigate();
 
   useEffect(() => {
-    const handleScroll = () => setScrolled(window.scrollY > 50);
+    const handleScroll = () => setScrolled(window.scrollY > 40);
     window.addEventListener('scroll', handleScroll, { passive: true });
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
@@ -32,170 +31,171 @@ export default function Navbar() {
     setMobileOpen(false);
   }, [location]);
 
+  const isActive = (href: string) =>
+    location.pathname === href || (location.pathname + location.search) === href;
+
   return (
     <>
       <nav
-        className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${
+        className={`fixed top-0 left-0 right-0 z-50 transition-all duration-500 ${
           scrolled
-            ? 'bg-lywaro-dark/90 backdrop-blur-md border-b border-white/5'
+            ? 'bg-black/80 backdrop-blur-xl border-b border-white/[0.06]'
             : 'bg-transparent'
         }`}
         role="navigation"
         aria-label="Main navigation"
       >
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex items-center justify-between h-16 lg:h-20">
-            {/* Logo */}
+        <div className="max-w-[1400px] mx-auto px-5 sm:px-8 lg:px-12">
+          <div className="flex items-center h-[60px] lg:h-[68px]">
+
+            {/* ── Logo ── */}
             <Link
               to="/"
-              className="flex items-center gap-2.5 text-xl lg:text-2xl font-black tracking-[0.3em] text-white hover:text-lywaro-crimson transition-colors group"
+              className="flex items-center gap-2 flex-shrink-0 group"
               aria-label="LYWARO home"
             >
-              <svg className="w-6 h-6 lg:w-7 lg:h-7 text-lywaro-crimson fill-current transition-transform duration-300 group-hover:scale-110" viewBox="0 0 36 36">
-                <path d="M4 8 L18 28 L24 19 L16 11 Z M18 28 L32 8 L27 8 L18 21 Z" />
+              {/* Red lightning bolt emblem matching reference */}
+              <svg
+                className="w-[22px] h-[22px] text-lywaro-crimson fill-current drop-shadow-[0_0_8px_rgba(213,0,0,0.8)] group-hover:scale-110 transition-transform duration-300"
+                viewBox="0 0 24 24"
+              >
+                <path d="M13 2L4.5 13.5H11L10 22L19.5 10.5H13L13 2Z" />
               </svg>
-              <span>LYWARO</span>
+              <span className="text-white font-black tracking-[0.28em] text-[15px] lg:text-[17px] group-hover:text-lywaro-crimson transition-colors duration-300">
+                LYWARO
+              </span>
             </Link>
 
-            {/* Desktop Nav */}
-            <div className="hidden lg:flex items-center gap-10">
+            {/* ── Centre Nav Links ── */}
+            <div className="hidden lg:flex items-center gap-9 mx-auto">
               {navLinks.map((link) => (
                 <Link
                   key={link.label}
                   to={link.href}
-                  className={`text-xs font-semibold tracking-[0.2em] transition-colors duration-200 ${
-                    (location.pathname + location.search) === link.href
-                      ? 'text-lywaro-crimson'
-                      : 'text-lywaro-gray hover:text-white'
+                  className={`relative text-[11px] font-bold tracking-[0.22em] transition-colors duration-200 pb-0.5 ${
+                    isActive(link.href)
+                      ? 'text-white'
+                      : 'text-white/50 hover:text-white'
                   }`}
                 >
                   {link.label}
+                  {isActive(link.href) && (
+                    <motion.span
+                      layoutId="nav-underline"
+                      className="absolute -bottom-0.5 left-0 right-0 h-px bg-lywaro-crimson"
+                    />
+                  )}
                 </Link>
               ))}
             </div>
 
-            {/* Desktop Actions */}
-            <div className="hidden lg:flex items-center gap-5">
+            {/* ── Right Icons ── */}
+            <div className="hidden lg:flex items-center gap-1 ml-auto">
+              {/* Search */}
               <button
                 onClick={openSearch}
-                className="p-2 text-lywaro-gray hover:text-white transition-colors"
+                className="p-2.5 text-white/50 hover:text-white transition-colors duration-200"
                 aria-label="Search"
               >
-                <Search size={20} strokeWidth={1.5} />
+                <Search size={18} strokeWidth={1.8} />
               </button>
+
+              {/* Wishlist */}
               <Link
                 to="/wishlist"
-                className="p-2 text-lywaro-gray hover:text-white transition-colors relative"
+                className="relative p-2.5 text-white/50 hover:text-white transition-colors duration-200"
                 aria-label={`Wishlist (${getCount()} items)`}
               >
-                <Heart size={20} strokeWidth={1.5} />
+                <Heart size={18} strokeWidth={1.8} />
                 {getCount() > 0 && (
-                  <span className="absolute -top-1 -right-1 w-4 h-4 bg-lywaro-crimson rounded-full flex items-center justify-center text-[10px] font-bold">
+                  <span className="absolute top-1 right-1 w-3.5 h-3.5 bg-lywaro-crimson rounded-full flex items-center justify-center text-[9px] font-black text-white">
                     {getCount()}
                   </span>
                 )}
               </Link>
+
+              {/* Cart */}
               <button
                 onClick={openCart}
-                className="p-2 text-lywaro-gray hover:text-white transition-colors relative"
+                className="relative p-2.5 text-white/50 hover:text-white transition-colors duration-200"
                 aria-label={`Cart (${getCartCount()} items)`}
               >
-                <ShoppingBag size={20} strokeWidth={1.5} />
+                <ShoppingBag size={18} strokeWidth={1.8} />
                 {getCartCount() > 0 && (
-                  <span className="absolute -top-1 -right-1 w-4 h-4 bg-lywaro-crimson rounded-full flex items-center justify-center text-[10px] font-bold">
+                  <span className="absolute top-1 right-1 min-w-[14px] h-3.5 bg-lywaro-crimson rounded-full flex items-center justify-center text-[9px] font-black text-white px-0.5">
                     {getCartCount()}
                   </span>
                 )}
               </button>
-              <Link
-                to="/account"
-                className="p-2 text-lywaro-gray hover:text-white transition-colors"
-                aria-label="Account"
+
+              {/* Hamburger */}
+              <button
+                onClick={() => setMobileOpen(!mobileOpen)}
+                className="p-2.5 text-white/50 hover:text-white transition-colors duration-200 ml-1"
+                aria-label="Open menu"
               >
-                <User size={20} strokeWidth={1.5} />
-              </Link>
+                <Menu size={18} strokeWidth={1.8} />
+              </button>
             </div>
 
-            {/* Mobile Actions */}
-            <div className="flex lg:hidden items-center gap-3">
-              <button
-                onClick={openSearch}
-                className="p-2 text-lywaro-gray hover:text-white transition-colors"
-                aria-label="Search"
-              >
-                <Search size={20} strokeWidth={1.5} />
+            {/* ── Mobile Right ── */}
+            <div className="flex lg:hidden items-center gap-1 ml-auto">
+              <button onClick={openSearch} className="p-2 text-white/60 hover:text-white" aria-label="Search">
+                <Search size={18} strokeWidth={1.8} />
               </button>
-              <button
-                onClick={openCart}
-                className="p-2 text-lywaro-gray hover:text-white transition-colors relative"
-                aria-label={`Cart (${getCartCount()} items)`}
-              >
-                <ShoppingBag size={20} strokeWidth={1.5} />
+              <button onClick={openCart} className="relative p-2 text-white/60 hover:text-white" aria-label="Cart">
+                <ShoppingBag size={18} strokeWidth={1.8} />
                 {getCartCount() > 0 && (
-                  <span className="absolute -top-1 -right-1 w-4 h-4 bg-lywaro-crimson rounded-full flex items-center justify-center text-[10px] font-bold">
+                  <span className="absolute top-1 right-1 w-3.5 h-3.5 bg-lywaro-crimson rounded-full flex items-center justify-center text-[9px] font-black">
                     {getCartCount()}
                   </span>
                 )}
               </button>
               <button
                 onClick={() => setMobileOpen(!mobileOpen)}
-                className="p-2 text-lywaro-gray hover:text-white transition-colors"
+                className="p-2 text-white/60 hover:text-white"
                 aria-label={mobileOpen ? 'Close menu' : 'Open menu'}
-                aria-expanded={mobileOpen}
               >
-                {mobileOpen ? <X size={24} /> : <Menu size={24} />}
+                {mobileOpen ? <X size={22} /> : <Menu size={22} />}
               </button>
             </div>
+
           </div>
         </div>
       </nav>
 
-      {/* Mobile Menu */}
+      {/* ── Mobile Menu ── */}
       <AnimatePresence>
         {mobileOpen && (
           <motion.div
             initial={{ opacity: 0, x: '100%' }}
             animate={{ opacity: 1, x: 0 }}
             exit={{ opacity: 0, x: '100%' }}
-            transition={{ type: 'tween', duration: 0.3 }}
-            className="fixed inset-0 z-40 bg-lywaro-black/98 flex flex-col pt-20 px-6"
+            transition={{ type: 'tween', duration: 0.28, ease: [0.4, 0, 0.2, 1] }}
+            className="fixed inset-0 z-40 bg-black/97 backdrop-blur-xl flex flex-col px-6 pt-20"
           >
-            <div className="flex flex-col gap-1 mt-8">
+            <div className="flex flex-col">
               {navLinks.map((link, i) => (
                 <motion.div
                   key={link.label}
-                  initial={{ opacity: 0, x: 20 }}
+                  initial={{ opacity: 0, x: 24 }}
                   animate={{ opacity: 1, x: 0 }}
-                  transition={{ delay: i * 0.1 }}
+                  transition={{ delay: 0.05 + i * 0.07, duration: 0.3 }}
                 >
                   <Link
                     to={link.href}
-                    className="block py-4 text-2xl font-bold tracking-[0.15em] text-white border-b border-white/5 hover:text-lywaro-crimson transition-colors"
+                    className="block py-5 text-[26px] font-black tracking-[0.12em] text-white/80 border-b border-white/5 hover:text-lywaro-crimson transition-colors"
                   >
                     {link.label}
                   </Link>
                 </motion.div>
               ))}
             </div>
-            <div className="mt-auto mb-12 flex flex-col gap-4">
-              <Link
-                to="/account"
-                className="flex items-center gap-3 py-3 text-lywaro-gray hover:text-white transition-colors"
-                onClick={() => setMobileOpen(false)}
-              >
-                <User size={20} strokeWidth={1.5} />
-                <span className="text-sm font-semibold tracking-wider">ACCOUNT</span>
-              </Link>
-              <Link
-                to="/wishlist"
-                className="flex items-center gap-3 py-3 text-lywaro-gray hover:text-white transition-colors"
-                onClick={() => setMobileOpen(false)}
-              >
-                <Heart size={20} strokeWidth={1.5} />
-                <span className="text-sm font-semibold tracking-wider">WISHLIST</span>
-                {getCount() > 0 && (
-                  <span className="ml-auto text-xs bg-lywaro-crimson text-white px-2 py-0.5 rounded-full">{getCount()}</span>
-                )}
+            <div className="mt-auto mb-10 flex flex-col gap-4 pt-6 border-t border-white/5">
+              <Link to="/wishlist" className="flex items-center gap-3 text-white/50 hover:text-white transition-colors" onClick={() => setMobileOpen(false)}>
+                <Heart size={18} strokeWidth={1.5} />
+                <span className="text-sm font-bold tracking-widest">WISHLIST</span>
+                {getCount() > 0 && <span className="ml-auto text-xs bg-lywaro-crimson text-white px-2 py-0.5 rounded-full">{getCount()}</span>}
               </Link>
             </div>
           </motion.div>

@@ -1,19 +1,20 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { Link } from 'react-router-dom';
 import { motion, useScroll, useTransform } from 'framer-motion';
-import { ArrowRight, RotateCcw, Move, Maximize2 } from 'lucide-react';
+import { ArrowRight } from 'lucide-react';
 import SneakerScene from './3d/SneakerScene';
 import { useReducedMotion } from '../hooks/useReducedMotion';
-import { formatPrice } from '../utils/format';
+
+const SIZES = [35, 36, 37, 38, 39, 40, 41, 42, 43, 44, 45];
 
 export default function Hero() {
-  const [hasInteracted, setHasInteracted] = useState(false);
-  const [mousePos, setMousePos] = useState({ x: 0, y: 0 });
   const [selectedSize, setSelectedSize] = useState<number>(40);
+  const [mousePos, setMousePos] = useState({ x: 0, y: 0 });
   const [isMobile, setIsMobile] = useState(false);
   const reducedMotion = useReducedMotion();
   const sectionRef = useRef<HTMLElement>(null);
 
+  /* ---------- responsive check ---------- */
   useEffect(() => {
     const check = () => setIsMobile(window.innerWidth < 768);
     check();
@@ -21,18 +22,7 @@ export default function Hero() {
     return () => window.removeEventListener('resize', check);
   }, []);
 
-  const { scrollYProgress } = useScroll({
-    target: sectionRef,
-    offset: ['start start', 'end start'],
-  });
-
-  const bgY = useTransform(scrollYProgress, [0, 1], ['0%', '30%']);
-  const apexY = useTransform(scrollYProgress, [0, 1], ['0%', '-50%']);
-  const sneakerScale = useTransform(scrollYProgress, [0, 0.5], [1, 0.85]);
-  const contentY = useTransform(scrollYProgress, [0, 1], ['0%', '-20%']);
-  const opacity = useTransform(scrollYProgress, [0, 0.7], [1, 0]);
-  const scrollIndicatorOpacity = useTransform(scrollYProgress, [0, 0.15], [1, 0]);
-
+  /* ---------- mouse parallax ---------- */
   useEffect(() => {
     if (reducedMotion || isMobile) return;
     const handler = (e: MouseEvent) => {
@@ -45,146 +35,167 @@ export default function Hero() {
     return () => window.removeEventListener('mousemove', handler);
   }, [reducedMotion, isMobile]);
 
-  const sizes = [35, 36, 37, 38, 39, 40, 41, 42, 43, 44, 45];
+  /* ---------- scroll transforms ---------- */
+  const { scrollYProgress } = useScroll({
+    target: sectionRef,
+    offset: ['start start', 'end start'],
+  });
+  const bgY        = useTransform(scrollYProgress, [0, 1], ['0%', '28%']);
+  const sneakerScale = useTransform(scrollYProgress, [0, 0.6], [1, 0.82]);
+  const contentY   = useTransform(scrollYProgress, [0, 1], ['0%', '-18%']);
+  const opacity    = useTransform(scrollYProgress, [0, 0.65], [1, 0]);
+  const scrollIndO = useTransform(scrollYProgress, [0, 0.18], [1, 0]);
 
   return (
     <section
       ref={sectionRef}
-      className="relative min-h-[200vh] bg-lywaro-black overflow-hidden"
-      aria-label="Hero section"
+      className="relative min-h-[200vh] overflow-hidden"
+      aria-label="Hero — LYWARO Apex"
     >
-      {/* Sticky hero container */}
+      {/* ─── sticky viewport ─── */}
       <div className="sticky top-0 h-screen w-full overflow-hidden">
-        {/* Volcanic hero background image */}
+
+        {/* ── Background image with parallax ── */}
         <motion.div
-          className="absolute inset-0 bg-cover bg-center bg-no-repeat"
+          className="absolute inset-0 bg-cover bg-center bg-no-repeat will-change-transform"
           style={{
             backgroundImage: `url('/hero-bg.png')`,
             y: reducedMotion ? 0 : bgY,
+            scale: 1.06,
           }}
         >
-          {/* Subtle dark gradient overlays for legibility */}
-          <div className="absolute inset-0 bg-gradient-to-r from-black/80 via-black/30 to-transparent md:from-black/75 md:via-black/20 md:to-transparent pointer-events-none" />
-          <div className="absolute inset-0 bg-gradient-to-t from-lywaro-black via-transparent to-black/40 pointer-events-none" />
+          {/* Left-side black gradient for text legibility */}
+          <div className="absolute inset-0 bg-gradient-to-r from-black/88 via-black/45 to-black/10 pointer-events-none" />
+          {/* Bottom fade to page */}
+          <div className="absolute inset-0 bg-gradient-to-t from-[#050505] via-transparent to-black/30 pointer-events-none" />
+          {/* Top nav area darkening */}
+          <div className="absolute top-0 left-0 right-0 h-32 bg-gradient-to-b from-black/60 to-transparent pointer-events-none" />
 
-          {/* Red crimson glow accent */}
+          {/* Floating crimson glow that follows the mouse */}
           <div
-            className="absolute top-1/2 right-[20%] w-[400px] h-[400px] md:w-[600px] md:h-[600px] rounded-full opacity-[0.18] pointer-events-none blur-3xl"
+            className="absolute top-1/2 right-[18%] w-[520px] h-[520px] rounded-full pointer-events-none"
             style={{
-              background: 'radial-gradient(circle, #D50000 0%, transparent 75%)',
+              background: 'radial-gradient(circle, rgba(213,0,0,0.32) 0%, transparent 72%)',
+              filter: 'blur(48px)',
               transform: reducedMotion
-                ? 'translate(20%, -50%)'
-                : `translate(${20 + mousePos.x * 3}%, ${-50 + mousePos.y * 3}%)`,
-              transition: 'transform 0.8s ease-out',
+                ? 'translate(20%, -52%)'
+                : `translate(${20 + mousePos.x * 4}%, ${-52 + mousePos.y * 4}%)`,
+              transition: 'transform 0.9s cubic-bezier(0.25,0.46,0.45,0.94)',
             }}
           />
         </motion.div>
 
-        {/* APEX watermark background text */}
-        <motion.div
-          style={{ y: reducedMotion ? 0 : apexY, opacity }}
+        {/* ── Ghost "APEX" watermark ── */}
+        <motion.span
+          style={{ opacity: useTransform(scrollYProgress, [0, 0.5], [1, 0]) }}
           className="absolute inset-0 flex items-center justify-center pointer-events-none select-none"
+          aria-hidden="true"
         >
-          <span
-            className="text-[25vw] md:text-[20vw] lg:text-[16vw] font-black text-white/[0.03] tracking-[0.25em]"
-            aria-hidden="true"
-          >
+          <span className="text-[22vw] lg:text-[17vw] font-black text-white/[0.025] tracking-[0.28em]">
             APEX
           </span>
-        </motion.div>
+        </motion.span>
 
-        {/* 3D Sneaker */}
+        {/* ── 3-D Sneaker ── */}
         <motion.div
-          style={{
-            scale: reducedMotion ? 1 : sneakerScale,
-            y: reducedMotion ? 0 : contentY,
-          }}
-          className="absolute inset-0 flex items-center justify-center"
+          style={{ scale: reducedMotion ? 1 : sneakerScale }}
+          className="absolute inset-0 pointer-events-none"
         >
           <div
-            className={`
-              w-full h-full
-              md:absolute md:right-[2%] md:top-[0%]
-              md:w-[75%] md:h-[85%] md:max-w-4xl
-              absolute right-0 top-[12%]
-              w-[90%] h-[55%] max-w-xl
-            `}
+            className="pointer-events-auto
+              absolute top-[8%] right-[-4%]
+              w-[95%] h-[88%]
+              md:top-[2%] md:right-[-2%]
+              md:w-[78%] md:h-[96%]
+            "
           >
-            <SneakerScene onInteractionStart={() => setHasInteracted(true)} />
+            <SneakerScene />
           </div>
         </motion.div>
 
-        {/* Hero Content — Left side */}
+        {/* ── Left Hero Content ── */}
         <motion.div
           style={{ y: reducedMotion ? 0 : contentY, opacity }}
-          className="absolute inset-0 flex flex-col justify-center z-10
-            px-6 md:px-12 lg:px-20 xl:px-24 pt-16 md:pt-0
-          "
+          className="absolute inset-0 flex items-center z-10 px-6 md:px-12 lg:px-16 xl:px-24 pt-16"
         >
-          <div className="max-w-xl">
-            {/* Top tag */}
+          <div className="max-w-lg">
+
+            {/* Tag line */}
             <motion.div
-              initial={{ opacity: 0, y: 20 }}
+              initial={{ opacity: 0, y: 18 }}
               animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 0.2, duration: 0.6 }}
-              className="flex items-center gap-3 mb-2"
+              transition={{ delay: 0.15, duration: 0.55, ease: [0.25, 0.46, 0.45, 0.94] }}
+              className="flex items-center gap-2.5 mb-2"
             >
-              <div className="w-6 h-px bg-lywaro-crimson" />
-              <span className="text-[11px] font-bold tracking-[0.25em] text-lywaro-crimson">
-                NEW DROP - 2026
+              <span className="block w-5 h-px bg-lywaro-crimson" />
+              <span className="text-[10.5px] font-bold tracking-[0.28em] text-lywaro-crimson uppercase">
+                New Drop &mdash; 2026
               </span>
             </motion.div>
 
             {/* Product code */}
             <motion.p
-              initial={{ opacity: 0, y: 20 }}
+              initial={{ opacity: 0, y: 18 }}
               animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 0.3, duration: 0.6 }}
-              className="text-xs font-mono text-white/50 tracking-widest mb-6"
+              transition={{ delay: 0.25, duration: 0.55, ease: [0.25, 0.46, 0.45, 0.94] }}
+              className="font-mono text-[11px] text-white/40 tracking-[0.22em] mb-7 uppercase"
             >
               LYWARO / 001
             </motion.p>
 
-            {/* Headline */}
+            {/* Main heading */}
             <motion.h1
-              initial={{ opacity: 0, y: 30 }}
+              initial={{ opacity: 0, y: 28 }}
               animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 0.4, duration: 0.8 }}
-              className="text-5xl sm:text-6xl md:text-7xl lg:text-8xl xl:text-9xl font-black tracking-tight leading-[0.9] mb-6"
+              transition={{ delay: 0.35, duration: 0.7, ease: [0.16, 1, 0.3, 1] }}
+              className="text-[56px] sm:text-[68px] md:text-[78px] lg:text-[92px] xl:text-[108px]
+                         font-black tracking-tight leading-[0.88] mb-5 uppercase"
             >
-              <span className="text-white">MOVE</span>
-              <br />
-              <span className="text-lywaro-crimson">DIFFERENT.</span>
+              <span className="text-white block">MOVE</span>
+              <span className="text-lywaro-crimson block" style={{ textShadow: '0 0 60px rgba(213,0,0,0.4)' }}>
+                DIFFERENT.
+              </span>
             </motion.h1>
 
             {/* Subtitle */}
             <motion.p
-              initial={{ opacity: 0, y: 20 }}
+              initial={{ opacity: 0, y: 18 }}
               animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 0.6, duration: 0.6 }}
-              className="text-xs md:text-sm text-white/70 max-w-md leading-relaxed mb-8 font-normal"
+              transition={{ delay: 0.55, duration: 0.55 }}
+              className="text-[13px] text-white/60 leading-[1.7] mb-8 max-w-xs"
             >
               Engineered for motion.<br />
               Designed for those who refuse ordinary.
             </motion.p>
 
-            {/* CTAs */}
+            {/* CTA buttons */}
             <motion.div
-              initial={{ opacity: 0, y: 20 }}
+              initial={{ opacity: 0, y: 18 }}
               animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 0.8, duration: 0.6 }}
-              className="flex flex-row items-center gap-3 sm:gap-4"
+              transition={{ delay: 0.7, duration: 0.55 }}
+              className="flex items-center gap-3"
             >
               <Link
                 to="/shop"
-                className="group flex items-center justify-center gap-2 bg-lywaro-crimson text-white px-7 py-3.5 rounded-full text-xs font-bold tracking-[0.15em] hover:bg-[#b00000] shadow-[0_0_25px_rgba(213,0,0,0.4)] transition-all duration-300"
+                className="group inline-flex items-center gap-2
+                  bg-lywaro-crimson text-white
+                  px-6 py-3 rounded-full
+                  text-[11px] font-bold tracking-[0.16em] uppercase
+                  shadow-[0_0_28px_rgba(213,0,0,0.55)]
+                  hover:bg-[#b80000] hover:shadow-[0_0_40px_rgba(213,0,0,0.7)]
+                  transition-all duration-300"
               >
                 EXPLORE COLLECTION
-                <ArrowRight size={14} className="group-hover:translate-x-1 transition-transform" />
+                <ArrowRight size={13} className="group-hover:translate-x-0.5 transition-transform duration-200" />
               </Link>
               <Link
                 to="/product/apex"
-                className="flex items-center justify-center gap-2 bg-black/40 backdrop-blur-sm border border-white/25 text-white px-7 py-3.5 rounded-full text-xs font-bold tracking-[0.15em] hover:border-white/60 hover:bg-black/60 transition-all duration-300"
+                className="inline-flex items-center gap-2
+                  border border-white/22 bg-white/5 backdrop-blur-sm text-white
+                  px-6 py-3 rounded-full
+                  text-[11px] font-bold tracking-[0.16em] uppercase
+                  hover:bg-white/12 hover:border-white/45
+                  transition-all duration-300"
               >
                 VIEW DETAILS
               </Link>
@@ -192,76 +203,67 @@ export default function Hero() {
           </div>
         </motion.div>
 
-        {/* Product details overlay — Right side overlay (matches Image 1) */}
+        {/* ── Product Info Panel — bottom right ── */}
         <motion.div
           style={{ opacity }}
-          className="absolute bottom-24 md:bottom-24 lg:bottom-28 z-20
-            right-6 md:right-12 lg:right-20 text-left md:text-right max-w-xs
-          "
+          className="absolute bottom-20 md:bottom-16 lg:bottom-20
+            right-5 md:right-10 lg:right-16 z-20
+            text-right max-w-[260px]"
         >
-          <h2 className="text-lg sm:text-xl lg:text-2xl font-black tracking-wider text-white mb-0.5">
+          <p className="text-[15px] md:text-[17px] font-black tracking-[0.18em] text-white mb-0.5 uppercase">
             LYWARO APEX
-          </h2>
-          <p className="text-xl sm:text-2xl lg:text-3xl font-black text-white mb-2">
+          </p>
+          <p className="text-[22px] md:text-[26px] font-black text-white mb-1.5 tabular-nums">
             ₹8,499
           </p>
-          <p className="text-[10px] sm:text-[11px] text-white/50 tracking-[0.2em] font-semibold mb-4 uppercase">
-            BLACK / CRIMSON
+          <p className="text-[10.5px] text-white/45 tracking-[0.22em] font-semibold mb-4 uppercase">
+            Black / Crimson
           </p>
 
-          {/* Size Selector Grid matching reference image */}
-          <div className="mb-4">
-            <p className="text-[10px] font-bold tracking-[0.25em] text-white/60 mb-2 uppercase">
-              SIZE
-            </p>
-            <div className="flex flex-wrap gap-1.5 justify-start md:justify-end items-center">
-              {sizes.map((sz) => {
-                const isSelected = sz === selectedSize;
-                return (
-                  <button
-                    key={sz}
-                    onClick={() => setSelectedSize(sz)}
-                    className={`text-[11px] font-bold transition-all duration-200 ${
-                      isSelected
-                        ? 'bg-lywaro-crimson text-white w-7 h-7 rounded-sm flex items-center justify-center border border-lywaro-crimson shadow-[0_0_10px_rgba(213,0,0,0.5)]'
-                        : 'text-white/60 hover:text-white px-1.5 py-1 text-[11px]'
-                    }`}
-                  >
-                    {sz}
-                  </button>
-                );
-              })}
+          {/* Size grid */}
+          <div className="mb-3.5">
+            <p className="text-[9.5px] font-bold tracking-[0.3em] text-white/40 mb-2 uppercase">Size</p>
+            <div className="flex flex-wrap gap-[5px] justify-end">
+              {SIZES.map((sz) => (
+                <button
+                  key={sz}
+                  onClick={() => setSelectedSize(sz)}
+                  className={`text-[10.5px] font-bold transition-all duration-200 leading-none ${
+                    sz === selectedSize
+                      ? 'bg-lywaro-crimson text-white w-[26px] h-[26px] rounded-[3px] flex items-center justify-center shadow-[0_0_12px_rgba(213,0,0,0.6)]'
+                      : 'text-white/45 hover:text-white/90 w-[26px] h-[26px] flex items-center justify-center rounded-[3px] hover:bg-white/8'
+                  }`}
+                >
+                  {sz}
+                </button>
+              ))}
             </div>
           </div>
 
-          {/* Drag to rotate hint with target crosshair icon */}
-          <div className="flex items-center gap-2 justify-start md:justify-end text-white/50 pt-1">
-            <div className="w-4 h-4 rounded-full border border-white/40 flex items-center justify-center">
-              <div className="w-1.5 h-1.5 rounded-full bg-white/80" />
+          {/* Rotate hint */}
+          <div className="flex items-center justify-end gap-2 text-white/40">
+            <div className="w-[15px] h-[15px] rounded-full border border-white/30 flex items-center justify-center">
+              <div className="w-[5px] h-[5px] rounded-full bg-white/60" />
             </div>
-            <span className="text-[10px] font-bold tracking-[0.25em] text-white/70">
-              DRAG TO ROTATE
-            </span>
+            <span className="text-[9.5px] font-bold tracking-[0.24em] uppercase">Drag to Rotate</span>
           </div>
         </motion.div>
 
-        {/* Scroll indicator matching Image 1 */}
+        {/* ── Scroll indicator ── */}
         <motion.div
-          style={{ opacity: reducedMotion ? 1 : scrollIndicatorOpacity }}
-          className="absolute bottom-6 md:bottom-8 left-1/2 -translate-x-1/2 z-20 flex flex-col items-center gap-1.5"
+          style={{ opacity: reducedMotion ? 1 : scrollIndO }}
+          className="absolute bottom-6 left-1/2 -translate-x-1/2 z-20 flex flex-col items-center gap-1.5"
         >
-          {/* Mouse outline icon */}
-          <div className="w-5 h-8 rounded-full border-2 border-white/40 flex justify-center pt-1.5">
+          <div className="w-[18px] h-[30px] rounded-full border-[1.5px] border-white/30 flex justify-center pt-[5px]">
             <motion.div
-              animate={{ y: [0, 6, 0] }}
-              transition={{ duration: 1.5, repeat: Infinity }}
-              className="w-1 h-1.5 rounded-full bg-white/70"
+              animate={{ y: [0, 8, 0] }}
+              transition={{ duration: 1.6, repeat: Infinity, ease: 'easeInOut' }}
+              className="w-[3px] h-[3px] rounded-full bg-white/60"
             />
           </div>
-          <span className="text-[9px] font-bold tracking-[0.3em] text-white/50">
-            SCROLL
-          </span>
+          <span className="text-[8.5px] font-bold tracking-[0.36em] text-white/35 uppercase">Scroll</span>
         </motion.div>
+
       </div>
     </section>
   );
