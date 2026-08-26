@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
-import { motion } from 'framer-motion';
-import { Heart, ShoppingBag, Eye } from 'lucide-react';
+import { motion, AnimatePresence } from 'framer-motion';
+import { Heart, Eye } from 'lucide-react';
 import { Product } from '../types';
 import { formatPrice } from '../utils/format';
 import { useWishlist } from '../context/WishlistContext';
@@ -15,12 +15,12 @@ interface ProductCardProps {
 }
 
 export default function ProductCard({ product }: ProductCardProps) {
-  const [isHovered, setIsHovered] = useState(false);
-  const [showQuickView, setShowQuickView] = useState(false);
+  const [hovered, setHovered] = useState(false);
+  const [quickView, setQuickView] = useState(false);
   const { toggleWishlist, isInWishlist } = useWishlist();
   const { addToCart } = useCart();
   const { addToast } = useToast();
-  const inWishlist = isInWishlist(product.id);
+  const wishlisted = isInWishlist(product.id);
 
   const handleAddToCart = (e: React.MouseEvent) => {
     e.preventDefault();
@@ -33,16 +33,13 @@ export default function ProductCard({ product }: ProductCardProps) {
     e.preventDefault();
     e.stopPropagation();
     toggleWishlist(product.id);
-    addToast(
-      inWishlist ? `${product.name} removed from wishlist` : `${product.name} added to wishlist`,
-      'success'
-    );
+    addToast(wishlisted ? `${product.name} removed from wishlist` : `${product.name} added to wishlist`, 'success');
   };
 
   const handleQuickView = (e: React.MouseEvent) => {
     e.preventDefault();
     e.stopPropagation();
-    setShowQuickView(true);
+    setQuickView(true);
   };
 
   return (
@@ -50,97 +47,114 @@ export default function ProductCard({ product }: ProductCardProps) {
       <Link
         to={`/product/${product.slug}`}
         className="group block"
-        onMouseEnter={() => setIsHovered(true)}
-        onMouseLeave={() => setIsHovered(false)}
+        onMouseEnter={() => setHovered(true)}
+        onMouseLeave={() => setHovered(false)}
       >
-        <div className="relative aspect-square bg-lywaro-charcoal overflow-hidden border border-white/5 group-hover:border-lywaro-crimson/50 group-hover:shadow-[0_0_30px_rgba(213,0,0,0.15)] transition-all duration-500">
+        {/* ── Card image area ── */}
+        <div
+          className="relative aspect-square bg-[#111111] overflow-hidden
+            border border-white/[0.07]
+            group-hover:border-lywaro-crimson/40
+            group-hover:shadow-[0_0_36px_rgba(213,0,0,0.14)]
+            transition-all duration-500"
+        >
           {/* Badge */}
           {product.badge && (
-            <div className="absolute top-3 left-3 z-10 bg-lywaro-crimson text-white text-[10px] font-bold tracking-[0.15em] px-3 py-1">
+            <div className="absolute top-3 left-3 z-10 bg-lywaro-crimson text-white
+              text-[9px] font-black tracking-[0.18em] px-2.5 py-1 uppercase">
               {product.badge}
             </div>
           )}
 
-          {/* Styled Metallic Sneaker Visual */}
+          {/* Shoe visual */}
           <ProductVisual
             slug={product.slug}
             name={product.name}
             category={product.category}
             accentColor={product.colors[0]?.hex || '#D50000'}
+            className="transition-transform duration-700 group-hover:scale-[1.04]"
           />
 
-          {/* Hover Overlay */}
-          <motion.div
-            initial={{ opacity: 0 }}
-            animate={{ opacity: isHovered ? 1 : 0 }}
-            transition={{ duration: 0.3 }}
-            className="absolute inset-0 bg-black/40 flex items-end justify-center p-4"
-          >
-            <div className="flex items-center gap-2 w-full">
-              <button
-                onClick={handleAddToCart}
-                className="flex-1 flex items-center justify-center gap-2 bg-white text-black py-3 text-xs font-bold tracking-wider hover:bg-lywaro-crimson hover:text-white transition-colors"
-                aria-label={`Add ${product.name} to cart`}
-              >
-                <ShoppingBag size={14} />
-                QUICK ADD
-              </button>
-              <button
-                onClick={handleQuickView}
-                className="p-3 bg-white/10 text-white hover:bg-white/20 transition-colors"
-                aria-label={`Quick view ${product.name}`}
-              >
-                <Eye size={14} />
-              </button>
-            </div>
-          </motion.div>
+          {/* Hover overlay — subtle darkening */}
+          <AnimatePresence>
+            {hovered && (
+              <motion.div
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                exit={{ opacity: 0 }}
+                transition={{ duration: 0.25 }}
+                className="absolute inset-0 bg-black/30"
+              />
+            )}
+          </AnimatePresence>
 
-          {/* Red Plus Button in Bottom Right Corner matching Image 1 */}
+          {/* Quick-view button — appears on hover */}
+          <AnimatePresence>
+            {hovered && (
+              <motion.button
+                initial={{ opacity: 0, y: 6 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0, y: 6 }}
+                transition={{ duration: 0.22 }}
+                onClick={handleQuickView}
+                className="absolute bottom-14 left-1/2 -translate-x-1/2
+                  flex items-center gap-1.5 z-20
+                  bg-white/10 backdrop-blur-sm border border-white/20 text-white
+                  px-4 py-2 text-[10px] font-bold tracking-[0.18em] uppercase
+                  hover:bg-white/20 transition-colors duration-200 whitespace-nowrap"
+              >
+                <Eye size={12} /> Quick View
+              </motion.button>
+            )}
+          </AnimatePresence>
+
+          {/* ── Wishlist icon — top right ── */}
+          <button
+            onClick={handleToggleWishlist}
+            className="absolute top-3 right-3 z-10 p-1.5 transition-transform duration-200 hover:scale-110"
+            aria-label={wishlisted ? `Remove ${product.name} from wishlist` : `Add ${product.name} to wishlist`}
+          >
+            <Heart
+              size={17}
+              strokeWidth={wishlisted ? 0 : 1.6}
+              className={wishlisted ? 'fill-lywaro-crimson text-lywaro-crimson' : 'text-white/55 hover:text-white'}
+            />
+          </button>
+
+          {/* ── Red + button — bottom right (matches reference exactly) ── */}
           <button
             onClick={handleAddToCart}
-            className="absolute bottom-3 right-3 z-10 w-9 h-9 bg-lywaro-crimson text-white flex items-center justify-center font-bold text-lg hover:bg-[#b00000] shadow-[0_0_15px_rgba(213,0,0,0.5)] transition-transform duration-200 active:scale-95"
+            className="absolute bottom-3 right-3 z-10
+              w-8 h-8 bg-lywaro-crimson text-white
+              flex items-center justify-center
+              text-lg font-black leading-none
+              hover:bg-[#b80000]
+              shadow-[0_0_14px_rgba(213,0,0,0.5)]
+              hover:shadow-[0_0_22px_rgba(213,0,0,0.7)]
+              transition-all duration-200 active:scale-90"
             aria-label={`Add ${product.name} to cart`}
-            title="Add to cart"
           >
             +
           </button>
-
-          {/* Wishlist Icon in Top Right */}
-          <button
-            onClick={handleToggleWishlist}
-            className="absolute top-3 right-3 z-10 p-2 transition-all duration-300"
-            aria-label={inWishlist ? `Remove ${product.name} from wishlist` : `Add ${product.name} to wishlist`}
-          >
-            <Heart
-              size={18}
-              strokeWidth={1.5}
-              className={`transition-colors duration-300 ${
-                inWishlist ? 'fill-lywaro-crimson text-lywaro-crimson' : 'text-white/60 hover:text-white'
-              }`}
-            />
-          </button>
         </div>
 
-        {/* Info matching Image 1 layout */}
-        <div className="mt-3.5 space-y-0.5">
-          <h3 className="text-base font-black tracking-widest text-white group-hover:text-lywaro-crimson transition-colors uppercase">
+        {/* ── Card info row ── */}
+        <div className="mt-3.5 space-y-0.5 px-0.5">
+          <h3 className="text-[13px] font-black tracking-[0.14em] text-white uppercase
+            group-hover:text-lywaro-crimson transition-colors duration-200">
             {product.name}
           </h3>
-          <p className="text-sm font-bold text-white">
+          <p className="text-[13px] font-bold text-white">
             {formatPrice(product.price)}
           </p>
-          <p className="text-xs text-white/50 tracking-wider">
+          <p className="text-[11px] text-white/40 tracking-wider">
             {product.colors[0]?.name}
           </p>
         </div>
       </Link>
 
-      {/* Quick View Modal */}
-      {showQuickView && (
-        <QuickView
-          product={product}
-          onClose={() => setShowQuickView(false)}
-        />
+      {quickView && (
+        <QuickView product={product} onClose={() => setQuickView(false)} />
       )}
     </>
   );
