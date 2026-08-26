@@ -9,7 +9,7 @@
     "server:dev": "node --watch server/server.js",
     "seed": "node server/seed.js",
     "build": "vite build",
-    "start": "NODE_ENV=production node server/server.js",
+    "start:local": "NODE_ENV=production node server/server.js",
     "preview": "vite preview --host",
     "check": "tsc --noEmit",
     "format": "prettier --write ."
