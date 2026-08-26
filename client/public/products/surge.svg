@@ -1,0 +1,10 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 400" fill="none">
+  <rect width="400" height="400" fill="#111211"/>
+  <rect x="20" y="20" width="360" height="360" fill="#1a1515" rx="0"/>
+  <path d="M55 258 Q50 225 95 215 L175 205 Q220 195 265 190 L325 185 Q365 183 375 198 L378 218 Q380 238 362 248 L342 258 Q315 268 255 273 L155 280 Q100 282 62 278 Z" fill="#D7F54A" stroke="#b8d93a" stroke-width="0.5"/>
+  <path d="M50 263 Q44 275 52 285 L370 268 Q378 265 372 258 L50 263Z" fill="#1a1d1a" stroke="#333" stroke-width="0.5"/>
+  <path d="M130 225 L150 218 L170 212 L190 206 L210 200 L230 195 L250 190" stroke="#111211" stroke-width="0.8" fill="none" opacity="0.3"/>
+  <path d="M110 250 Q200 233 355 213" stroke="#111211" stroke-width="2" fill="none" opacity="0.3"/>
+  <text x="200" y="340" text-anchor="middle" font-family="monospace" font-size="10" fill="#D7F54A" letter-spacing="3">LYWARO SURGE</text>
+  <text x="200" y="358" text-anchor="middle" font-family="monospace" font-size="8" fill="#555" letter-spacing="2">TRAIN / ATHLETIC</text>
+</svg>

@@ -4,7 +4,7 @@ import * as THREE from "three";
 import { GLTFLoader } from "three/examples/jsm/loaders/GLTFLoader.js";
 import { Maximize2, RotateCcw, ZoomIn, ZoomOut } from "lucide-react";
 
-const MODEL_URL = "/manus-storage/lywaro-apex_057990b2.glb";
+const MODEL_URL = "/models/lywaro-apex.glb";
 
 type ModelViewerProps = {
   compact?: boolean;
