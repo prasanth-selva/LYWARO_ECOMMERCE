@@ -95,7 +95,17 @@ export default function ProductCard({ product }: ProductCardProps) {
             </div>
           </motion.div>
 
-          {/* Wishlist */}
+          {/* Red Plus Button in Bottom Right Corner matching Image 1 */}
+          <button
+            onClick={handleAddToCart}
+            className="absolute bottom-3 right-3 z-10 w-9 h-9 bg-lywaro-crimson text-white flex items-center justify-center font-bold text-lg hover:bg-[#b00000] shadow-[0_0_15px_rgba(213,0,0,0.5)] transition-transform duration-200 active:scale-95"
+            aria-label={`Add ${product.name} to cart`}
+            title="Add to cart"
+          >
+            +
+          </button>
+
+          {/* Wishlist Icon in Top Right */}
           <button
             onClick={handleToggleWishlist}
             className="absolute top-3 right-3 z-10 p-2 transition-all duration-300"
@@ -105,35 +115,23 @@ export default function ProductCard({ product }: ProductCardProps) {
               size={18}
               strokeWidth={1.5}
               className={`transition-colors duration-300 ${
-                inWishlist ? 'fill-lywaro-crimson text-lywaro-crimson' : 'text-white/50 hover:text-white'
+                inWishlist ? 'fill-lywaro-crimson text-lywaro-crimson' : 'text-white/60 hover:text-white'
               }`}
             />
           </button>
         </div>
 
-        {/* Info */}
-        <div className="mt-4 space-y-1">
-          <div className="flex items-center justify-between">
-            <h3 className="text-sm font-bold tracking-wider text-white group-hover:text-lywaro-crimson transition-colors">
-              {product.name}
-            </h3>
-            <span className="text-sm font-bold text-white">
-              {formatPrice(product.price)}
-            </span>
-          </div>
-          <p className="text-xs text-lywaro-gray">
+        {/* Info matching Image 1 layout */}
+        <div className="mt-3.5 space-y-0.5">
+          <h3 className="text-base font-black tracking-widest text-white group-hover:text-lywaro-crimson transition-colors uppercase">
+            {product.name}
+          </h3>
+          <p className="text-sm font-bold text-white">
+            {formatPrice(product.price)}
+          </p>
+          <p className="text-xs text-white/50 tracking-wider">
             {product.colors[0]?.name}
           </p>
-          <div className="flex items-center gap-1">
-            {product.colors.map((color) => (
-              <div
-                key={color.name}
-                className="w-3 h-3 rounded-full border border-white/20"
-                style={{ backgroundColor: color.hex }}
-                title={color.name}
-              />
-            ))}
-          </div>
         </div>
       </Link>
 
