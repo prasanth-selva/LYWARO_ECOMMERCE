@@ -8,6 +8,7 @@ import { useToast } from '../context/ToastContext';
 import { products } from '../data/products';
 import { Product } from '../types';
 import { formatPrice } from '../utils/format';
+import ProductVisual from '../components/ProductVisual';
 
 export default function Wishlist() {
   const { items, removeFromWishlist } = useWishlist();
@@ -50,10 +51,15 @@ export default function Wishlist() {
                 exit={{ opacity: 0, scale: 0.9 }}
                 className="bg-lywaro-charcoal border border-white/5 group"
               >
-                <Link to={`/product/${product.slug}`} className="block aspect-square bg-lywaro-dark flex items-center justify-center relative">
-                  <span className="text-4xl font-black text-white/10 tracking-wider">{product.name}</span>
+                <Link to={`/product/${product.slug}`} className="block aspect-square bg-lywaro-dark relative overflow-hidden">
+                  <ProductVisual
+                    slug={product.slug}
+                    name={product.name}
+                    category={product.category}
+                    accentColor={product.colors[0]?.hex || '#D50000'}
+                  />
                   {product.badge && (
-                    <span className="absolute top-3 left-3 text-[10px] font-bold tracking-[0.15em] text-lywaro-crimson bg-lywaro-crimson/10 px-2 py-1">
+                    <span className="absolute top-3 left-3 z-10 text-[10px] font-bold tracking-[0.15em] text-white bg-lywaro-crimson px-2.5 py-1">
                       {product.badge}
                     </span>
                   )}

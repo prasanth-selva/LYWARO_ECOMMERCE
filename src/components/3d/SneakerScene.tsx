@@ -102,7 +102,7 @@ export default function SneakerScene({ className = '', onInteractionStart }: Sne
       onWheel={handleWheel}
       onTouchStart={handleTouchStart}
       onTouchMove={handleTouchMove}
-      style={{ touchAction: 'none', cursor: isDragging ? 'grabbing' : 'grab' }}
+      style={{ touchAction: 'pan-y', cursor: isDragging ? 'grabbing' : 'grab' }}
     >
       <Canvas
         shadows

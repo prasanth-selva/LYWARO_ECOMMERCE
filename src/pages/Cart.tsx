@@ -4,6 +4,7 @@ import { motion } from 'framer-motion';
 import { Plus, Minus, Trash2, ArrowLeft, ShoppingBag, ArrowRight } from 'lucide-react';
 import { useCart } from '../context/CartContext';
 import { formatPrice } from '../utils/format';
+import ProductVisual from '../components/ProductVisual';
 
 export default function CartPage() {
   const { items, updateQuantity, removeFromCart, getCartTotal, clearCart } = useCart();
@@ -50,8 +51,13 @@ export default function CartPage() {
                 >
                   {/* Image */}
                   <Link to={`/product/${item.product.slug}`}
-                    className="w-20 h-20 md:w-24 md:h-24 bg-lywaro-dark flex items-center justify-center flex-shrink-0">
-                    <span className="text-xl md:text-xl font-bold text-white/10">{item.product.name[0]}</span>
+                    className="w-20 h-20 md:w-24 md:h-24 bg-lywaro-dark relative overflow-hidden flex-shrink-0">
+                    <ProductVisual
+                      slug={item.product.slug}
+                      name={item.product.name}
+                      category={item.product.category}
+                      accentColor={item.product.colors[0]?.hex || '#D50000'}
+                    />
                   </Link>
 
                   {/* Details */}

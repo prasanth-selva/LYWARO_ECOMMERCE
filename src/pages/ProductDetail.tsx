@@ -10,6 +10,7 @@ import { useCart } from '../context/CartContext';
 import { useWishlist } from '../context/WishlistContext';
 import { useToast } from '../context/ToastContext';
 import SneakerScene from '../components/3d/SneakerScene';
+import ProductVisual from '../components/ProductVisual';
 
 export default function ProductDetail() {
   const { slug } = useParams<{ slug: string }>();
@@ -90,18 +91,23 @@ export default function ProductDetail() {
                 </span>
               )}
 
-              {/* 3D model or image placeholder */}
-              {product.modelPath ? (
+              {/* 3D model or image display */}
+              {product.modelPath && activeImage === 0 ? (
                 <div className="aspect-square bg-lywaro-charcoal border border-white/5 relative">
                   <SneakerScene />
-                  <div className="absolute bottom-3 left-3 flex items-center gap-1.5 text-[10px] font-semibold tracking-wider text-lywaro-gray/40">
+                  <div className="absolute bottom-3 left-3 flex items-center gap-1.5 text-[10px] font-semibold tracking-wider text-lywaro-gray/40 pointer-events-none">
                     <Move size={10} />
                     INTERACTIVE 3D · DRAG TO ROTATE
                   </div>
                 </div>
               ) : (
-                <div className="aspect-square bg-lywaro-charcoal border border-white/5 flex items-center justify-center">
-                  <span className="text-5xl md:text-6xl font-black text-white/10 tracking-wider">{product.name}</span>
+                <div className="aspect-square bg-lywaro-charcoal border border-white/5 relative overflow-hidden">
+                  <ProductVisual
+                    slug={product.slug}
+                    name={product.name}
+                    category={product.category}
+                    accentColor={product.colors[selectedColor]?.hex || '#D50000'}
+                  />
                 </div>
               )}
 

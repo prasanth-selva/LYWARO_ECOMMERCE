@@ -7,6 +7,7 @@ import { formatPrice, getStars } from '../utils/format';
 import { useWishlist } from '../context/WishlistContext';
 import { useCart } from '../context/CartContext';
 import { useToast } from '../context/ToastContext';
+import ProductVisual from './ProductVisual';
 
 interface QuickViewProps {
   product: Product;
@@ -56,8 +57,13 @@ export default function QuickView({ product, onClose }: QuickViewProps) {
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-0">
             {/* Image */}
-            <div className="aspect-square bg-lywaro-dark flex items-center justify-center">
-              <div className="text-5xl font-black text-white/10 tracking-wider">{product.name}</div>
+            <div className="aspect-square bg-lywaro-dark relative overflow-hidden">
+              <ProductVisual
+                slug={product.slug}
+                name={product.name}
+                category={product.category}
+                accentColor={product.colors[0]?.hex || '#D50000'}
+              />
             </div>
 
             {/* Info */}

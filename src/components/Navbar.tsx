@@ -61,7 +61,7 @@ export default function Navbar() {
                   key={link.label}
                   to={link.href}
                   className={`text-xs font-semibold tracking-[0.2em] transition-colors duration-200 ${
-                    location.pathname === link.href
+                    (location.pathname + location.search) === link.href
                       ? 'text-lywaro-crimson'
                       : 'text-lywaro-gray hover:text-white'
                   }`}

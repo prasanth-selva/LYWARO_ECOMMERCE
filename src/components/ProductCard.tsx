@@ -8,6 +8,7 @@ import { useWishlist } from '../context/WishlistContext';
 import { useCart } from '../context/CartContext';
 import { useToast } from '../context/ToastContext';
 import QuickView from './QuickView';
+import ProductVisual from './ProductVisual';
 
 interface ProductCardProps {
   product: Product;
@@ -52,7 +53,7 @@ export default function ProductCard({ product }: ProductCardProps) {
         onMouseEnter={() => setIsHovered(true)}
         onMouseLeave={() => setIsHovered(false)}
       >
-        <div className="relative aspect-square bg-lywaro-charcoal overflow-hidden border border-white/5 group-hover:border-lywaro-crimson/30 transition-all duration-500">
+        <div className="relative aspect-square bg-lywaro-charcoal overflow-hidden border border-white/5 group-hover:border-lywaro-crimson/50 group-hover:shadow-[0_0_30px_rgba(213,0,0,0.15)] transition-all duration-500">
           {/* Badge */}
           {product.badge && (
             <div className="absolute top-3 left-3 z-10 bg-lywaro-crimson text-white text-[10px] font-bold tracking-[0.15em] px-3 py-1">
@@ -60,13 +61,13 @@ export default function ProductCard({ product }: ProductCardProps) {
             </div>
           )}
 
-          {/* Product Image Placeholder */}
-          <div className="w-full h-full flex items-center justify-center bg-gradient-to-br from-lywaro-charcoal to-lywaro-dark">
-            <div className="text-center">
-              <div className="text-4xl font-black text-white/10 tracking-wider">{product.name}</div>
-              <div className="text-xs text-white/5 mt-2 tracking-widest">{product.category}</div>
-            </div>
-          </div>
+          {/* Styled Metallic Sneaker Visual */}
+          <ProductVisual
+            slug={product.slug}
+            name={product.name}
+            category={product.category}
+            accentColor={product.colors[0]?.hex || '#D50000'}
+          />
 
           {/* Hover Overlay */}
           <motion.div

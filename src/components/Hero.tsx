@@ -52,30 +52,27 @@ export default function Hero() {
     >
       {/* Sticky hero container */}
       <div className="sticky top-0 h-screen w-full overflow-hidden">
-        {/* Background atmosphere */}
+        {/* Cinematic volcanic hero background image */}
         <motion.div
-          style={{ y: reducedMotion ? 0 : bgY }}
-          className="absolute inset-0"
+          className="absolute inset-0 bg-cover bg-center bg-no-repeat"
+          style={{
+            backgroundImage: `url('/hero-bg.png')`,
+            y: reducedMotion ? 0 : bgY,
+          }}
         >
-          <div className="absolute inset-0 bg-gradient-to-b from-lywaro-black via-lywaro-dark to-lywaro-black" />
+          {/* Subtle dark gradient overlays for high typography legibility while maintaining volcanic atmosphere */}
+          <div className="absolute inset-0 bg-gradient-to-r from-black/85 via-black/40 to-transparent md:from-black/75 md:via-black/30 md:to-transparent pointer-events-none" />
+          <div className="absolute inset-0 bg-gradient-to-t from-lywaro-black via-transparent to-black/50 pointer-events-none" />
 
-          {/* Crimson glow - follows mouse on desktop */}
+          {/* Subtle crimson ambient glow accent */}
           <div
-            className="absolute top-1/2 right-0 w-[400px] h-[400px] md:w-[600px] md:h-[600px] rounded-full opacity-[0.06]"
+            className="absolute top-1/2 right-[15%] w-[350px] h-[350px] md:w-[500px] md:h-[500px] rounded-full opacity-[0.12] pointer-events-none blur-3xl"
             style={{
               background: 'radial-gradient(circle, #D50000 0%, transparent 70%)',
               transform: reducedMotion
-                ? 'translate(30%, -50%)'
-                : `translate(${30 + mousePos.x * 3}%, ${-50 + mousePos.y * 3}%)`,
+                ? 'translate(20%, -50%)'
+                : `translate(${20 + mousePos.x * 2}%, ${-50 + mousePos.y * 2}%)`,
               transition: 'transform 0.8s ease-out',
-            }}
-          />
-
-          {/* Noise grain */}
-          <div
-            className="absolute inset-0 opacity-[0.03]"
-            style={{
-              backgroundImage: `url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)'/%3E%3C/svg%3E")`,
             }}
           />
         </motion.div>

@@ -7,6 +7,7 @@ import { searchProducts } from '../services/productService';
 import { popularSearches, recentSearches } from '../data/products';
 import { Product } from '../types';
 import { formatPrice } from '../utils/format';
+import ProductVisual from './ProductVisual';
 
 export default function SearchOverlay() {
   const { isOpen, closeSearch, query, setQuery } = useSearch();
@@ -82,8 +83,13 @@ export default function SearchOverlay() {
                         onClick={closeSearch}
                         className="flex items-center gap-4 p-3 hover:bg-white/5 transition-colors group"
                       >
-                        <div className="w-16 h-16 bg-lywaro-charcoal flex items-center justify-center flex-shrink-0">
-                          <span className="text-lg font-bold text-white/20">{product.name[0]}</span>
+                        <div className="w-16 h-16 bg-lywaro-charcoal relative overflow-hidden flex-shrink-0">
+                          <ProductVisual
+                            slug={product.slug}
+                            name={product.name}
+                            category={product.category}
+                            accentColor={product.colors[0]?.hex || '#D50000'}
+                          />
                         </div>
                         <div className="flex-1 min-w-0">
                           <h4 className="text-sm font-bold text-white group-hover:text-lywaro-crimson transition-colors">

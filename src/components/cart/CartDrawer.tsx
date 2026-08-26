@@ -4,6 +4,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { X, Plus, Minus, Trash2, ShoppingBag, ArrowRight } from 'lucide-react';
 import { useCart } from '../../context/CartContext';
 import { formatPrice } from '../../utils/format';
+import ProductVisual from '../ProductVisual';
 
 export default function CartDrawer() {
   const { items, isOpen, closeCart, updateQuantity, removeFromCart, getCartTotal } = useCart();
@@ -73,9 +74,14 @@ export default function CartDrawer() {
                     <Link
                       to={`/product/${item.product.slug}`}
                       onClick={closeCart}
-                      className="w-18 h-18 md:w-20 md:h-20 bg-lywaro-dark flex items-center justify-center flex-shrink-0"
+                      className="w-18 h-18 md:w-20 md:h-20 bg-lywaro-dark relative overflow-hidden flex-shrink-0"
                     >
-                      <span className="text-lg font-bold text-white/10">{item.product.name[0]}</span>
+                      <ProductVisual
+                        slug={item.product.slug}
+                        name={item.product.name}
+                        category={item.product.category}
+                        accentColor={item.product.colors[0]?.hex || '#D50000'}
+                      />
                     </Link>
 
                     {/* Details */}

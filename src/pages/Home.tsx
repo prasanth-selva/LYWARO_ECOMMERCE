@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { motion, useInView } from 'framer-motion';
 import { useRef } from 'react';
-import { ArrowRight, ArrowUpRight } from 'lucide-react';
+import { ArrowRight, ArrowUpRight, Activity, ShieldCheck, Truck, Headphones } from 'lucide-react';
 import Hero from '../components/Hero';
 import ProductGrid from '../components/ProductGrid';
 import { products, categories } from '../data/products';
@@ -116,6 +116,47 @@ export default function Home() {
             ))}
           </div>
         </AnimatedSection>
+      </section>
+
+      {/* Benefits Section */}
+      <section className="py-16 border-y border-white/5 bg-lywaro-dark/50">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <AnimatedSection>
+            <div className="grid grid-cols-2 md:grid-cols-4 gap-8 md:gap-6 text-center">
+              <div className="flex flex-col items-center">
+                <div className="w-12 h-12 rounded-full bg-white/5 flex items-center justify-center mb-4 text-lywaro-crimson border border-white/10">
+                  <Activity size={22} />
+                </div>
+                <h4 className="text-xs md:text-sm font-black tracking-[0.2em] text-white mb-1">ENGINEERED</h4>
+                <p className="text-[10px] md:text-xs font-bold tracking-[0.15em] text-lywaro-gray">FOR MOTION</p>
+              </div>
+
+              <div className="flex flex-col items-center">
+                <div className="w-12 h-12 rounded-full bg-white/5 flex items-center justify-center mb-4 text-lywaro-crimson border border-white/10">
+                  <ShieldCheck size={22} />
+                </div>
+                <h4 className="text-xs md:text-sm font-black tracking-[0.2em] text-white mb-1">PREMIUM</h4>
+                <p className="text-[10px] md:text-xs font-bold tracking-[0.15em] text-lywaro-gray">QUALITY</p>
+              </div>
+
+              <div className="flex flex-col items-center">
+                <div className="w-12 h-12 rounded-full bg-white/5 flex items-center justify-center mb-4 text-lywaro-crimson border border-white/10">
+                  <Truck size={22} />
+                </div>
+                <h4 className="text-xs md:text-sm font-black tracking-[0.2em] text-white mb-1">FAST & SECURE</h4>
+                <p className="text-[10px] md:text-xs font-bold tracking-[0.15em] text-lywaro-gray">DELIVERY</p>
+              </div>
+
+              <div className="flex flex-col items-center">
+                <div className="w-12 h-12 rounded-full bg-white/5 flex items-center justify-center mb-4 text-lywaro-crimson border border-white/10">
+                  <Headphones size={22} />
+                </div>
+                <h4 className="text-xs md:text-sm font-black tracking-[0.2em] text-white mb-1">DEDICATED</h4>
+                <p className="text-[10px] md:text-xs font-bold tracking-[0.15em] text-lywaro-gray">SUPPORT</p>
+              </div>
+            </div>
+          </AnimatedSection>
+        </div>
       </section>
 
       {/* Brand Story */}

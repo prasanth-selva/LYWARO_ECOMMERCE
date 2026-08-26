@@ -4,6 +4,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { ChevronRight } from 'lucide-react';
 import { useCart } from '../context/CartContext';
 import { formatPrice } from '../utils/format';
+import ProductVisual from '../components/ProductVisual';
 
 const steps = ['INFORMATION', 'SHIPPING', 'PAYMENT', 'REVIEW'];
 
@@ -146,8 +147,13 @@ export default function Checkout() {
                       {items.map(item => (
                         <div key={`${item.product.id}-${item.size}-${item.color}`} className="flex items-center justify-between p-3 bg-lywaro-charcoal border border-white/5">
                           <div className="flex items-center gap-3 min-w-0">
-                            <div className="w-12 h-12 bg-lywaro-dark flex items-center justify-center flex-shrink-0">
-                              <span className="text-sm font-bold text-white/10">{item.product.name[0]}</span>
+                            <div className="w-12 h-12 bg-lywaro-dark relative overflow-hidden flex-shrink-0">
+                              <ProductVisual
+                                slug={item.product.slug}
+                                name={item.product.name}
+                                category={item.product.category}
+                                accentColor={item.product.colors[0]?.hex || '#D50000'}
+                              />
                             </div>
                             <div className="min-w-0">
                               <p className="text-sm font-bold text-white truncate">{item.product.name}</p>
