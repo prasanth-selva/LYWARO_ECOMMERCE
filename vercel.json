@@ -6,9 +6,7 @@
   "framework": null,
   "functions": {
     "api/index.js": {
-      "includeFiles": [
-        "server/**"
-      ],
+      "includeFiles": "server/**",
       "maxDuration": 30
     }
   },
